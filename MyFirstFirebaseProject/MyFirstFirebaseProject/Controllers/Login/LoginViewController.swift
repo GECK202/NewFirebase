@@ -9,7 +9,7 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-
+    
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.clipsToBounds = true
@@ -25,17 +25,23 @@ class LoginViewController: UIViewController {
     
     private let emailField: UITextField = {
         let field = UITextField()
-        field.keyboardType = UIKeyboardType.emailAddress
         field.autocapitalizationType = .none
         field.autocorrectionType = .no
         field.returnKeyType = .continue
-        field.layer.cornerRadius = 12
+        field.keyboardType = UIKeyboardType.emailAddress
+        field.layer.cornerRadius = 20
         field.layer.borderWidth = 1
         field.layer.borderColor = UIColor.lightGray.cgColor
-        field.placeholder = "Введите email ..."
-        field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
+        field.placeholder = "Введите email..."
         field.leftViewMode = .always
         field.backgroundColor = .secondarySystemBackground
+        let someView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 24))
+        let imageView = UIImageView(image: UIImage(systemName: "envelope"))
+        imageView.frame = CGRect(x: 10, y: 0, width: 24, height: 24)
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .black
+        someView.addSubview(imageView)
+        field.leftView = someView
         return field
     }()
     
@@ -44,7 +50,7 @@ class LoginViewController: UIViewController {
         field.autocapitalizationType = .none
         field.autocorrectionType = .no
         field.returnKeyType = .done
-        field.layer.cornerRadius = 12
+        field.layer.cornerRadius = 20
         field.layer.borderWidth = 1
         field.layer.borderColor = UIColor.lightGray.cgColor
         field.placeholder = "Введите пароль..."
@@ -52,15 +58,22 @@ class LoginViewController: UIViewController {
         field.leftViewMode = .always
         field.backgroundColor = .secondarySystemBackground
         field.isSecureTextEntry = true
+        let someView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 24))
+        let imageView = UIImageView(image: UIImage(systemName: "lock"))
+        imageView.frame = CGRect(x: 10, y: 0, width: 24, height: 24)
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .black
+        someView.addSubview(imageView)
+        field.leftView = someView
         return field
     }()
-
+    
     private let loginButton: UIButton = {
         let button = UIButton()
         button.setTitle("Войти", for: .normal)
         button.backgroundColor = UIColor(named: "BaseColor")
         button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 12
+        button.layer.cornerRadius = 20
         button.layer.masksToBounds = true
         button.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
         return button
@@ -74,6 +87,10 @@ class LoginViewController: UIViewController {
                                                             style: .done,
                                                             target: self,
                                                             action: #selector(didTapRegister))
+        
+        emailField.delegate = self
+        passwordField.delegate = self
+        
         loginButton.addTarget(
             self,
             action: #selector(loginButtonTapped),
@@ -86,29 +103,33 @@ class LoginViewController: UIViewController {
         scrollView.addSubview(passwordField)
         scrollView.addSubview(loginButton)
     }
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        let v_space: CGFloat = 30
+        let h_space: CGFloat = 60
+        let left_space: CGFloat = 30
+        let h_item: CGFloat = 52
         
         scrollView.frame = view.bounds
         
         let size = scrollView.width/3
         imageView.frame = CGRect(x: (scrollView.width-size)/2,
-                                 y: 20,
+                                 y: v_space,
                                  width: size,
                                  height: size)
-        emailField.frame = CGRect(x: 30,
-                                  y: imageView.bottom+10,
-                                  width: scrollView.width-60,
-                                  height: 52)
-        passwordField.frame = CGRect(x: 30,
-                                     y: emailField.bottom+10,
-                                     width: scrollView.width-60,
-                                     height: 52)
-        loginButton.frame = CGRect(x: 30,
-                                   y: passwordField.bottom+10,
-                                   width: scrollView.width-60,
-                                   height: 52)
+        emailField.frame = CGRect(x: left_space,
+                                  y: imageView.bottom+v_space,
+                                  width: scrollView.width-h_space,
+                                  height: h_item)
+        passwordField.frame = CGRect(x: left_space,
+                                     y: emailField.bottom+v_space,
+                                     width: scrollView.width-h_space,
+                                     height: h_item)
+        loginButton.frame = CGRect(x: left_space,
+                                   y: passwordField.bottom+v_space,
+                                   width: scrollView.width-h_space,
+                                   height: h_item)
     }
     
     @objc private func loginButtonTapped(){
@@ -117,6 +138,8 @@ class LoginViewController: UIViewController {
                 alertUserLoginError()
                 return
         }
+        
+        print("OK")
     }
     
     func alertUserLoginError() {
@@ -135,3 +158,32 @@ class LoginViewController: UIViewController {
     }
 }
 
+extension LoginViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        if textField == emailField {
+            passwordField.becomeFirstResponder()
+        }
+        else if textField == passwordField {
+            loginButtonTapped()
+        }
+        
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        
+        textField.layer.borderColor = UIColor(named: "BaseColor")?.cgColor
+        textField.layer.borderWidth = 2
+        
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.layer.borderWidth = 1
+        
+    }
+    
+}
