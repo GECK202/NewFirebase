@@ -1,1 +1,10 @@
 https://www.youtube.com/watch?v=g7ipElQVpgU
+
+https://www.youtube.com/watch?v=0UqefDcOSaY
+
+https://www.youtube.com/watch?v=rHo9EoscXow
+
+Select code and press Ctrl + I for auto align
+
+#command for break simulators 
+xcrun simctl shutdown all && xcrun simctl erase all

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class RegisterViewController: UIViewController {
 
@@ -90,7 +91,7 @@ class RegisterViewController: UIViewController {
             return field
         }()
         
-        private let loginButton: UIButton = {
+        private let RegisterButton: UIButton = {
             let button = UIButton()
             button.setTitle("Зарегистрироваться", for: .normal)
             button.backgroundColor = UIColor(named: "BaseColor")
@@ -111,9 +112,9 @@ class RegisterViewController: UIViewController {
             passwordField.delegate = self
             userField.delegate = self
             
-            loginButton.addTarget(
+            RegisterButton.addTarget(
                 self,
-                action: #selector(loginButtonTapped),
+                action: #selector(RegisterButtonTapped),
                 for: .touchUpInside
             )
             
@@ -122,7 +123,7 @@ class RegisterViewController: UIViewController {
             scrollView.addSubview(emailField)
             scrollView.addSubview(passwordField)
             scrollView.addSubview(userField)
-            scrollView.addSubview(loginButton)
+            scrollView.addSubview(RegisterButton)
         }
         
         override func viewDidLayoutSubviews() {
@@ -151,20 +152,35 @@ class RegisterViewController: UIViewController {
                                          y: passwordField.bottom+v_space,
                                          width: scrollView.width-h_space,
                                          height: h_item)
-            loginButton.frame = CGRect(x: left_space,
+            RegisterButton.frame = CGRect(x: left_space,
                                        y: userField.bottom+v_space,
                                        width: scrollView.width-h_space,
                                        height: h_item)
         }
         
-        @objc private func loginButtonTapped(){
+        @objc private func RegisterButtonTapped(){
+            
+            emailField.resignFirstResponder()
+            passwordField.resignFirstResponder()
+            userField.resignFirstResponder()
+            
             guard let email = emailField.text, let password = passwordField.text, let user = userField.text,
                 !email.isEmpty, !password.isEmpty, password.count >= 6, !user.isEmpty else {
                     alertUserLoginError()
                     return
             }
             
-            print("OK")
+            FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password, completion: {[weak self] authResult, error in
+                guard let strongSelf = self else {
+                    return
+                }
+                guard let result = authResult, error == nil else {
+                    print("Ошибка создания пользователя")
+                    return
+                }
+                print("Create user \(result.user)")
+                strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+            })
         }
         
         func alertUserLoginError() {
@@ -187,7 +203,10 @@ class RegisterViewController: UIViewController {
                 passwordField.becomeFirstResponder()
             }
             else if textField == passwordField {
-                loginButtonTapped()
+                userField.becomeFirstResponder()
+            }
+            else if textField == userField {
+                RegisterButtonTapped()
             }
             
             return true
