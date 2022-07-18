@@ -13,7 +13,8 @@
 		265FAA44287C65B9003F2792 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 265FAA42287C65B9003F2792 /* Main.storyboard */; };
 		265FAA46287C65BB003F2792 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 265FAA45287C65BB003F2792 /* Assets.xcassets */; };
 		265FAA49287C65BB003F2792 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 265FAA47287C65BB003F2792 /* LaunchScreen.storyboard */; };
-		26A0C0BD287C6B5400C9F567 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26A0C0BC287C6B5400C9F567 /* GoogleService-Info.plist */; };
+		267FF2A02885B1AA00AC5329 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 267FF29F2885B1AA00AC5329 /* GoogleService-Info.plist */; };
+		268CC0C22881D7C400B7F59F /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268CC0C12881D7C400B7F59F /* DatabaseManager.swift */; };
 		26A0C0C1287C742A00C9F567 /* ConversationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A0C0C0287C742A00C9F567 /* ConversationsViewController.swift */; };
 		26A0C0C3287C76B400C9F567 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A0C0C2287C76B400C9F567 /* RegisterViewController.swift */; };
 		26A0C0C6287C7DC500C9F567 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A0C0C5287C7DC500C9F567 /* Extensions.swift */; };
@@ -29,7 +30,8 @@
 		265FAA45287C65BB003F2792 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		265FAA48287C65BB003F2792 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		265FAA4A287C65BB003F2792 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		26A0C0BC287C6B5400C9F567 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		267FF29F2885B1AA00AC5329 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		268CC0C12881D7C400B7F59F /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		26A0C0C0287C742A00C9F567 /* ConversationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsViewController.swift; sourceTree = "<group>"; };
 		26A0C0C2287C76B400C9F567 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		26A0C0C5287C7DC500C9F567 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -80,7 +82,7 @@
 		265FAA3B287C65B9003F2792 /* MyFirstFirebaseProject */ = {
 			isa = PBXGroup;
 			children = (
-				26A0C0BC287C6B5400C9F567 /* GoogleService-Info.plist */,
+				267FF29F2885B1AA00AC5329 /* GoogleService-Info.plist */,
 				26A0C0C4287C7DA700C9F567 /* Resources */,
 				26A0C0BF287C723500C9F567 /* Controllers */,
 				26A0C0C7287C7F0E00C9F567 /* Views */,
@@ -113,6 +115,7 @@
 				265FAA3C287C65B9003F2792 /* AppDelegate.swift */,
 				265FAA3E287C65B9003F2792 /* SceneDelegate.swift */,
 				26A0C0C5287C7DC500C9F567 /* Extensions.swift */,
+				268CC0C12881D7C400B7F59F /* DatabaseManager.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -204,7 +207,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				265FAA49287C65BB003F2792 /* LaunchScreen.storyboard in Resources */,
-				26A0C0BD287C6B5400C9F567 /* GoogleService-Info.plist in Resources */,
+				267FF2A02885B1AA00AC5329 /* GoogleService-Info.plist in Resources */,
 				265FAA46287C65BB003F2792 /* Assets.xcassets in Resources */,
 				265FAA44287C65B9003F2792 /* Main.storyboard in Resources */,
 			);
@@ -265,6 +268,7 @@
 				26A0C0C1287C742A00C9F567 /* ConversationsViewController.swift in Sources */,
 				265FAA3D287C65B9003F2792 /* AppDelegate.swift in Sources */,
 				265FAA3F287C65B9003F2792 /* SceneDelegate.swift in Sources */,
+				268CC0C22881D7C400B7F59F /* DatabaseManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -58,7 +58,7 @@ class RegisterViewController: UIViewController {
             field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
             field.leftViewMode = .always
             field.backgroundColor = .secondarySystemBackground
-            field.isSecureTextEntry = true
+            //field.isSecureTextEntry = true
             let someView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 24))
             let imageView = UIImageView(image: UIImage(systemName: "lock"))
             imageView.frame = CGRect(x: 10, y: 0, width: 24, height: 24)
@@ -166,26 +166,36 @@ class RegisterViewController: UIViewController {
             
             guard let email = emailField.text, let password = passwordField.text, let user = userField.text,
                 !email.isEmpty, !password.isEmpty, password.count >= 6, !user.isEmpty else {
-                    alertUserLoginError()
+                    alertUserRegisterError()
                     return
             }
             
-            FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password, completion: {[weak self] authResult, error in
+            DatabaseManager.shared.userExists(with: email, competition: {[weak self] exists in
                 guard let strongSelf = self else {
                     return
                 }
-                guard let result = authResult, error == nil else {
-                    print("Ошибка создания пользователя")
+                
+                guard !exists else {
+                    strongSelf.alertUserRegisterError(message: "Пользователь с email \(email) уже зарегистрирован!")
                     return
                 }
-                print("Create user \(result.user)")
-                strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+                FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password, completion: { authResult, error in
+                    guard authResult != nil, error == nil else {
+                        print("Ошибка создания пользователя")
+                        return
+                    }
+                    let user = ChatAppUser(name: user, emailAddress: email)
+                    
+                    DatabaseManager.shared.insertUser(with: user)
+                    
+                    strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+                })
             })
         }
         
-        func alertUserLoginError() {
+    func alertUserRegisterError(message: String = "Заполните все поля для авторизации!\nПароль не менее 6 символов!") {
             let alert = UIAlertController(title: "Уупс...",
-                                          message: "Пожалуйста, заполните все поля для входа.\nДлина пароля не менее 6 символов",
+                                          message: message,
                                           preferredStyle: .alert)
             alert.addAction(UIAlertAction(title:"Закрыть",
                                           style: .cancel, handler: nil))

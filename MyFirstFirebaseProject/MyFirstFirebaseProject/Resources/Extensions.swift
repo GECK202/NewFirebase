@@ -36,3 +36,37 @@ extension UIView {
     }
 
 }
+
+extension CGFloat {
+    static func random() -> CGFloat {
+        return CGFloat(arc4random()) / CGFloat(UInt32.max)
+    }
+    
+    static func random(from: Int, to: Int) -> CGFloat {
+        let delta = to - from
+        guard delta >= 0, from >= 0 else { return 100 }
+        return CGFloat.random() * CGFloat(delta) + CGFloat(from)
+    }
+}
+
+extension UIColor {
+    static func random() -> UIColor {
+        return UIColor(
+           red:   .random(),
+           green: .random(),
+           blue:  .random(),
+           alpha: 1.0
+        )
+    }
+    
+    var coreImageColor: CIColor {
+        return CIColor(color: self)
+    }
+    
+    var hex: UInt {
+        let red = UInt(coreImageColor.red * 255 + 0.5)
+        let green = UInt(coreImageColor.green * 255 + 0.5)
+        let blue = UInt(coreImageColor.blue * 255 + 0.5)
+        return (red << 16) | (green << 8) | blue
+    }
+}

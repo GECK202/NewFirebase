@@ -22,7 +22,7 @@ class ConversationsViewController: UIViewController {
         
         validateAuth()
         
-        //let isLoggedIn = UserDefaults.standard.bool(forKey: "logged_in")
+        
         
     }
     
