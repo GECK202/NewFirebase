@@ -17,7 +17,7 @@ final class DatabaseManager {
     
     static func safeEmail(emailAddress: String) -> String {
         var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
-        safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
+        safeEmail = safeEmail.replacingOccurrences(of: "@", with: "^")
         return safeEmail
     }
         
@@ -41,18 +41,41 @@ extension DatabaseManager {
     
     ///Insert new user to database
     public func insertUser(with user: ChatAppUser) {
-        let safeEmail = DatabaseManager.safeEmail(emailAddress: user.emailAddress)
-       
-        database.child("users").child(safeEmail).setValue([
+        database.child("User").child(user.id).setValue([
+            "id": user.id,
             "name": user.name,
-            "color": String(UIColor.random().hex),
+            "email": user.emailAddress,
+            "color": user.color,
             "status": "no status"
         ])
     }
+    
+    
+
+    public func getUser(with id: String,
+                         completion: @escaping ((ChatAppUser)-> Void)) {
+              
+        database.child("User").child(id).observeSingleEvent(of: .value, with: {snapshot in
+            // Get user value
+            let value = snapshot.value as? NSDictionary
+            let name = value?["name"] as? String ?? ""
+            let email = value?["email"] as? String ?? ""
+            let textColor = value?["color"] as? String ?? ""
+            let status = value?["status"] as? String ?? ""
+            completion(ChatAppUser(id: id, name: name, emailAddress: email, color: textColor, status: status))
+        }) { error in
+            print(error.localizedDescription)
+        }
+    }
+    
+    
 }
 
 struct  ChatAppUser {
+    let id: String
     let name: String
     let emailAddress: String
+    let color: String
+    let status: String
 }
 

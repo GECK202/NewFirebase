@@ -151,6 +151,7 @@ class LoginViewController: UIViewController {
             
             guard let result = authResult, error == nil else {
                 print("Ошибка входа")
+                strongSelf.alertUserLoginError(message: "Ошибка входа")
                 return
             }
             print("Log in user \(result.user)")
@@ -158,9 +159,9 @@ class LoginViewController: UIViewController {
         })
     }
     
-    func alertUserLoginError() {
+    func alertUserLoginError(message: String = "Пожалуйста, заполните все поля для входа.\nДлина пароля не менее 6 символов") {
         let alert = UIAlertController(title: "Уупс...",
-                                      message: "Пожалуйста, заполните все поля для входа.\nДлина пароля не менее 6 символов",
+                                      message: message,
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title:"Закрыть",
                                       style: .cancel, handler: nil))

@@ -169,28 +169,26 @@ class RegisterViewController: UIViewController {
                     alertUserRegisterError()
                     return
             }
-            
-            DatabaseManager.shared.userExists(with: email, competition: {[weak self] exists in
-                guard let strongSelf = self else {
-                    return
-                }
-                
-                guard !exists else {
-                    strongSelf.alertUserRegisterError(message: "Пользователь с email \(email) уже зарегистрирован!")
-                    return
-                }
-                FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password, completion: { authResult, error in
-                    guard authResult != nil, error == nil else {
-                        print("Ошибка создания пользователя")
+                FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password, completion: {[weak self] authResult, error in
+                    
+                    guard let strongSelf = self else {
                         return
                     }
-                    let user = ChatAppUser(name: user, emailAddress: email)
+                    
+                    guard authResult != nil, error == nil else {
+                        print("Ошибка создания пользователя")
+                        if let error = error as NSError?, error.code == 17007 {
+                            strongSelf.alertUserRegisterError(message: "Пользователь с email \(email) уже зарегистрирован!")
+                        }                       
+                        return
+                    }
+                    let uid = Auth.auth().currentUser?.uid ?? ""
+                    let user = ChatAppUser(id: uid, name: user, emailAddress: email, color: String(UIColor.random().toUInt), status: "no status")
                     
                     DatabaseManager.shared.insertUser(with: user)
                     
                     strongSelf.navigationController?.dismiss(animated: true, completion: nil)
                 })
-            })
         }
         
     func alertUserRegisterError(message: String = "Заполните все поля для авторизации!\nПароль не менее 6 символов!") {

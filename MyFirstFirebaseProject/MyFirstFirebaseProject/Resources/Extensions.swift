@@ -59,14 +59,30 @@ extension UIColor {
         )
     }
     
+    static func fromUIntText(text: String) -> UIColor {
+        let col: UInt = UInt(text) ?? 0
+        let red = CGFloat(col >> 16) / 255.0
+        let green = CGFloat((col & 0xFFFF) >> 8) / 255.0
+        let blue = CGFloat(col & 0x0000FF) / 255.0
+        print("\(col >> 16) \((col & 0xFFFF) >> 8) \(col & 0x0000FF)")
+        return UIColor(
+           red:   red,
+           green: green,
+           blue:  blue,
+           alpha: 1.0
+        )
+    }
+    
     var coreImageColor: CIColor {
         return CIColor(color: self)
     }
     
-    var hex: UInt {
+    var toUInt: UInt {
         let red = UInt(coreImageColor.red * 255 + 0.5)
         let green = UInt(coreImageColor.green * 255 + 0.5)
         let blue = UInt(coreImageColor.blue * 255 + 0.5)
         return (red << 16) | (green << 8) | blue
     }
+    
+    
 }

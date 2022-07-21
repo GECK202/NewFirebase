@@ -19,11 +19,7 @@ class ConversationsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         validateAuth()
-        
-        
-        
     }
     
     private func validateAuth() {
@@ -32,7 +28,24 @@ class ConversationsViewController: UIViewController {
             let nav = UINavigationController(rootViewController: vc)
             nav.modalPresentationStyle = .fullScreen
             present(nav, animated: false)
+        } else { getUserInfo() }
+    }
+    
+    private func getUserInfo() {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            print("Неизвестная ошибка!")
+            return
         }
+        DatabaseManager.shared.getUser(with: uid, completion: {[weak self] user in
+            guard let strongSelf = self else {
+                return
+            }
+            
+            let col = UIColor.fromUIntText(text: user.color)
+            strongSelf.view.backgroundColor = col
+            print ("name-\(user.name) color-\(col) email-\(user.emailAddress)")
+            
+        })
     }
 
 
