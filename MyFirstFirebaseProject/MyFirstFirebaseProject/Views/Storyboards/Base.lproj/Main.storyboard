@@ -26,7 +26,6 @@
         <!--MesAes-->
         <scene sceneID="G2a-Zr-m1L">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="XWk-CY-HKr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController id="905-AO-0Cx" customClass="ConversationsViewController" customModule="MyFirstFirebaseProject" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zOx-OT-7ZD">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -36,6 +35,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="MesAes" id="527-cl-1dV"/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XWk-CY-HKr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="134.78260869565219" y="99.776785714285708"/>
         </scene>
@@ -63,7 +63,7 @@
         <!--Поиск-->
         <scene sceneID="Bz3-Y0-4St">
             <objects>
-                <viewController id="JR5-cw-F1m" sceneMemberID="viewController">
+                <viewController id="JR5-cw-F1m" customClass="NewConversationViewController" customModule="MyFirstFirebaseProject" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6Za-tI-2ng">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
