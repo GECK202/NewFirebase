@@ -1,0 +1,15 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '13.0'
+
+target 'FB' do
+  use_frameworks!
+
+pod 'Firebase/Core', '~>8'
+pod 'Firebase/Auth', '~>8'
+pod 'Firebase/Database', '~>8'
+
+pod 'JGProgressHUD'
+
+pod 'MessageKit'
+
+end
