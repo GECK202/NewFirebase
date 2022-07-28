@@ -185,7 +185,7 @@ class RegisterViewController: UIViewController {
             }
             
             guard authResult != nil, error == nil else {
-                print("Ошибка создания пользователя")
+                print("Ошибка создания пользователя\n\(String(describing: error))")
                 if let error = error as NSError?, error.code == 17007 {
                     strongSelf.alertUserRegisterError(message: "Пользователь с email \(email) уже зарегистрирован!")
                 }

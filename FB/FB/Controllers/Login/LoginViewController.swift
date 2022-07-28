@@ -162,7 +162,12 @@ class LoginViewController: UIViewController {
                 strongSelf.alertUserLoginError(message: "Ошибка входа")
                 return
             }
-            print("Log in user \(result.user)")
+            
+            let user = result.user
+            
+            UserDefaults.standard.set(email, forKey: "email")
+            
+            print("Log in user \(user)")
             strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         })
     }

@@ -46,8 +46,52 @@ extension DatabaseManager {
             "email": user.emailAddress,
             "color": user.color,
             "status": "no status"
-        ])
+        ])}
+    
+    /*
+    , withCompletionBlock: {[weak self] error, _ in
+            
+            guard let strongSelf = self else {
+                return
+            }
+            
+            guard error == nil else {
+                print("Ошибка записи пользователя в базу данных!")
+                return
+            }
+            strongSelf.database.child("User").observeSingleEvent(of: .value, with: { snapshot in
+                if var usersCollection = snapshot.value as? [[String: String]] {
+                    let newElement = [
+                        "name": user.name,
+                        "email": user.emailAddress,
+                        "status": user.status
+                    ]
+                    usersCollection.append(newElement)
+                    strongSelf.database.child("User").setValue(usersCollection, withCompletionBlock: { error, _ in
+                        guard error == nil else {
+                            return
+                        }
+                    })
+                }
+                else {
+                    let newCollection: [[String: String]] = [
+                        [
+                            "name": user.name,
+                            "email": user.emailAddress,
+                            "status": user.status
+                        ]
+                    ]
+                    
+                    strongSelf.database.child("User").setValue(newCollection, withCompletionBlock: { error, _ in
+                        guard error == nil else {
+                            return
+                        }
+                    })
+                }
+            })
+        })
     }
+     */
     
     
 
@@ -67,7 +111,30 @@ extension DatabaseManager {
         }
     }
     
-    
+    public func getAllUsers(completion: @escaping (([ChatAppUser])->Void)) {
+        var users: [ChatAppUser] = []
+        self.database.child("User").observeSingleEvent(of: .value, with: { snapshot in
+            guard let dic = snapshot.value as? NSDictionary else {
+                completion(users)
+                return
+            }
+            
+            for (_, v) in dic {
+                guard let value = v as? NSDictionary, let id = value["id"] as? String else {
+                    continue
+                }
+                let name = value["name"] as? String ?? ""
+                let email = value["email"] as? String ?? ""
+                let textColor = value["color"] as? String ?? ""
+                let status = value["status"] as? String ?? ""
+                users.append(ChatAppUser(id: id, name: name, emailAddress: email, color: textColor, status: status))
+                    //print("\(name), \(email), \(textColor), \(status)")
+            }
+            completion(users)
+        }) { error in
+            print(error.localizedDescription)
+        }
+    }
 }
 
 struct  ChatAppUser {

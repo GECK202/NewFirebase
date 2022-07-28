@@ -20,6 +20,15 @@ class ProfileViewController: UIViewController {
                            forCellReuseIdentifier: "cell")
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.tableHeaderView = createTableHeader()
+    }
+    
+    func createTableHeader()->UIView? {
+        //guard let email = UserDefaults.standard.value(forKey: "email") else {
+        //    return nil
+        //}
+        let view = UIView()
+        return view
     }
 }
 

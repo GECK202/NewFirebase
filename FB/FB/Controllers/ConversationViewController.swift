@@ -11,6 +11,8 @@ import JGProgressHUD
 
 class ConversationsViewController: UIViewController {
     
+    private var userList: [ChatAppUser] = []
+    
     private let spinner = JGProgressHUD(style: .dark)
     
     private let tableView: UITableView = {
@@ -32,7 +34,8 @@ class ConversationsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        getAllUsers()
+        
         view.addSubview(tableView)
         view.addSubview(noConversationsLabel)
         setupTableView()
@@ -47,6 +50,7 @@ class ConversationsViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         validateAuth()
+        
     }
     
     private func validateAuth() {
@@ -83,25 +87,37 @@ class ConversationsViewController: UIViewController {
     private func fetchConversations() {
         tableView.isHidden = false
     }
+    
+    private func getAllUsers() {
+        DatabaseManager.shared.getAllUsers(completion: {[weak self] users in
+            guard let strongSelf = self else {
+                return
+            }
+            strongSelf.userList = users
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        })
+    }
+        
 }
 
 extension ConversationsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return userList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "Test User"
+        cell.textLabel?.text = userList[indexPath.row].name
         cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
         let vc = ChatViewController()
-        vc.title = "Test User"
+        vc.title = userList[indexPath.row].name
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
     }

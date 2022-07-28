@@ -13,7 +13,7 @@
         <!--MesAes-->
         <scene sceneID="SSO-8G-Hjl">
             <objects>
-                <viewController id="NNB-se-0Tg" customClass="ConversationsViewController" customModule="MyFirstFirebaseProject" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="NNB-se-0Tg" customClass="ConversationsViewController" customModule="FB" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QYh-wN-9YU">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -50,7 +50,7 @@
         <!--Поиск-->
         <scene sceneID="5Ok-jW-UiZ">
             <objects>
-                <viewController id="yP6-GK-dBW" customClass="NewConversationViewController" customModule="MyFirstFirebaseProject" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="yP6-GK-dBW" customClass="NewConversationViewController" customModule="FB" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cRk-zb-YN3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -87,7 +87,7 @@
         <!--Профиль-->
         <scene sceneID="Dg0-Rh-nfd">
             <objects>
-                <viewController id="Z4L-99-32L" customClass="ProfileViewController" customModule="MyFirstFirebaseProject" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Z4L-99-32L" customClass="ProfileViewController" customModule="FB" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lxE-Z6-WxP">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
