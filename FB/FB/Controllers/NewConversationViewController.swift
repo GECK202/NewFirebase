@@ -10,11 +10,14 @@ import JGProgressHUD
 
 class NewConversationViewController: UIViewController {
 
+    public var completion: ((SearchResult) -> (Void))?
+    
     private let spinner = JGProgressHUD(style: .dark)
     
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Search for Users ..."
+        
         return searchBar
     }()
     
@@ -77,6 +80,7 @@ extension NewConversationViewController: UISearchBarDelegate, UITableViewDelegat
         
         let vc = ChatViewController()
         vc.title = "Search User"
+        
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
     }

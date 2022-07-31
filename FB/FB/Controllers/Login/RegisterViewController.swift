@@ -60,7 +60,7 @@ class RegisterViewController: UIViewController {
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
         field.leftViewMode = .always
         field.backgroundColor = .secondarySystemBackground
-        //field.isSecureTextEntry = true
+        field.isSecureTextEntry = true
         let someView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 24))
         let imageView = UIImageView(image: UIImage(systemName: "lock"))
         imageView.frame = CGRect(x: 10, y: 0, width: 24, height: 24)

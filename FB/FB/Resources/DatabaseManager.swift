@@ -7,10 +7,13 @@
 
 import Foundation
 import FirebaseDatabase
+import UIKit
 
 final class DatabaseManager {
     
     static let shared = DatabaseManager()
+    
+    private var user: ChatAppUser?
     
     private let database = Database.database().reference()
     
@@ -45,70 +48,31 @@ extension DatabaseManager {
             "name": user.name,
             "email": user.emailAddress,
             "color": user.color,
-            "status": "no status"
-        ])}
-    
-    /*
-    , withCompletionBlock: {[weak self] error, _ in
-            
-            guard let strongSelf = self else {
-                return
-            }
-            
-            guard error == nil else {
-                print("Ошибка записи пользователя в базу данных!")
-                return
-            }
-            strongSelf.database.child("User").observeSingleEvent(of: .value, with: { snapshot in
-                if var usersCollection = snapshot.value as? [[String: String]] {
-                    let newElement = [
-                        "name": user.name,
-                        "email": user.emailAddress,
-                        "status": user.status
-                    ]
-                    usersCollection.append(newElement)
-                    strongSelf.database.child("User").setValue(usersCollection, withCompletionBlock: { error, _ in
-                        guard error == nil else {
-                            return
-                        }
-                    })
-                }
-                else {
-                    let newCollection: [[String: String]] = [
-                        [
-                            "name": user.name,
-                            "email": user.emailAddress,
-                            "status": user.status
-                        ]
-                    ]
-                    
-                    strongSelf.database.child("User").setValue(newCollection, withCompletionBlock: { error, _ in
-                        guard error == nil else {
-                            return
-                        }
-                    })
-                }
-            })
-        })
+            "status": user.status
+        ])
     }
-     */
-    
     
 
     public func getUser(with id: String,
-                         completion: @escaping ((ChatAppUser)-> Void)) {
-              
-        database.child("User").child(id).observeSingleEvent(of: .value, with: {snapshot in
-            // Get user value
-            let value = snapshot.value as? NSDictionary
-            let name = value?["name"] as? String ?? ""
-            let email = value?["email"] as? String ?? ""
-            let textColor = value?["color"] as? String ?? ""
-            let status = value?["status"] as? String ?? ""
-            completion(ChatAppUser(id: id, name: name, emailAddress: email, color: textColor, status: status))
-        }) { error in
-            print(error.localizedDescription)
+                        completion: @escaping ((ChatAppUser)-> Void)) {
+        if self.user == nil {
+            database.child("User").child(id).observeSingleEvent(of: .value, with: {snapshot in
+                // Get user value
+                let value = snapshot.value as? NSDictionary
+                let name = value?["name"] as? String ?? ""
+                let email = value?["email"] as? String ?? ""
+                let textColor = value?["color"] as? String ?? ""
+                let status = value?["status"] as? String ?? ""
+                self.user = ChatAppUser(id: id, name: name, emailAddress: email, color: textColor, status: status)
+                completion(self.user!)
+            }) { error in
+                print(error.localizedDescription)
+                return
+            }
+        } else {
+            completion(self.user!)
         }
+        
     }
     
     public func getAllUsers(completion: @escaping (([ChatAppUser])->Void)) {
@@ -118,7 +82,7 @@ extension DatabaseManager {
                 completion(users)
                 return
             }
-            
+            print("\(dic)")
             for (_, v) in dic {
                 guard let value = v as? NSDictionary, let id = value["id"] as? String else {
                     continue
@@ -128,20 +92,59 @@ extension DatabaseManager {
                 let textColor = value["color"] as? String ?? ""
                 let status = value["status"] as? String ?? ""
                 users.append(ChatAppUser(id: id, name: name, emailAddress: email, color: textColor, status: status))
-                    //print("\(name), \(email), \(textColor), \(status)")
+                    print("\(name), \(email), \(textColor), \(status)")
             }
             completion(users)
         }) { error in
             print(error.localizedDescription)
         }
     }
+    
+    public enum DatabaseError: Error {
+        case failedToFetch
+
+        public var localizedDescription: String {
+            switch self {
+            case .failedToFetch:
+                return "This means blah failed"
+            }
+        }
+    }
+    
 }
 
-struct  ChatAppUser {
-    let id: String
-    let name: String
-    let emailAddress: String
-    let color: String
-    let status: String
+extension DatabaseManager {
+    
+    public func getAllConversations(for id: String, completion: @escaping (Result<[Conversation], Error>) -> Void) {
+        database.child("\(id)/conversations").observe(.value, with: { snapshot in
+            guard let value = snapshot.value as? [[String: Any]] else{
+                completion(.failure(DatabaseError.failedToFetch))
+                return
+            }
+            
+            let conversations: [Conversation] = value.compactMap({ dictionary in
+                guard let conversationId = dictionary["id"] as? String,
+                      let name = dictionary["name"] as? String,
+                      let otherUserEmail = dictionary["other_user_email"] as? String,
+                      let latestMessage = dictionary["latest_message"] as? [String: Any],
+                      let date = latestMessage["date"] as? String,
+                      let message = latestMessage["message"] as? String,
+                      let isRead = latestMessage["is_read"] as? Bool else {
+                          return nil
+                      }
+                
+                let latestMmessageObject = LatestMessage(date: date,
+                                                         text: message,
+                                                         isRead: isRead)
+                return Conversation(id: conversationId,
+                                    name: name,
+                                    otherUserEmail: otherUserEmail,
+                                    latestMessage: latestMmessageObject)
+            })
+            
+            completion(.success(conversations))
+        })
+    }
+    
 }
 

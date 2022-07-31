@@ -2,7 +2,7 @@
 //  AttachmentManager.swift
 //  InputBarAccessoryView
 //
-//  Copyright © 2017-2020 Nathan Tannar.
+//  Copyright © 2017-2019 Nathan Tannar.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -62,11 +62,7 @@ open class AutocompleteManager: NSObject, InputPlugin, UITextViewDelegate, UITab
         let tableView = AutocompleteTableView()
         tableView.register(AutocompleteCell.self, forCellReuseIdentifier: AutocompleteCell.reuseIdentifier)
         tableView.separatorStyle = .none
-        if #available(iOS 13, *) {
-            tableView.backgroundColor = .systemBackground
-        } else {
-            tableView.backgroundColor = .white
-        }
+        tableView.backgroundColor = .white
         tableView.rowHeight = 44
         tableView.delegate = self
         tableView.dataSource = self
@@ -98,15 +94,8 @@ open class AutocompleteManager: NSObject, InputPlugin, UITextViewDelegate, UITab
     open var deleteCompletionByParts = true
     
     /// The default text attributes
-    open var defaultTextAttributes: [NSAttributedString.Key: Any] = {
-        var foregroundColor: UIColor
-        if #available(iOS 13, *) {
-            foregroundColor = .label
-        } else {
-            foregroundColor = .black
-        }
-        return [.font: UIFont.preferredFont(forTextStyle: .body), .foregroundColor: foregroundColor]
-    }()
+    open var defaultTextAttributes: [NSAttributedString.Key: Any] =
+        [.font: UIFont.preferredFont(forTextStyle: .body), .foregroundColor: UIColor.black]
     
     /// The NSAttributedString.Key.paragraphStyle value applied to attributed strings
     public let paragraphStyle: NSMutableParagraphStyle = {
@@ -335,12 +324,7 @@ open class AutocompleteManager: NSObject, InputPlugin, UITextViewDelegate, UITab
         attrs[.autocompleted] = true
         attrs[.autocompletedContext] = session.completion?.context
         let newString = (keepPrefixOnCompletion ? session.prefix : "") + autocomplete
-        let newAttributedString = NSMutableAttributedString(string: newString, attributes: attrs)
-        
-        // Append extra space if needed
-        if appendSpaceOnCompletion {
-          newAttributedString.append(NSAttributedString(string: " ", attributes: typingTextAttributes))
-        }
+        let newAttributedString = NSAttributedString(string: newString, attributes: attrs)
         
         // Modify the NSRange to include the prefix length
         let rangeModifier = keepPrefixOnCompletion ? session.prefix.count : 0
@@ -348,11 +332,9 @@ open class AutocompleteManager: NSObject, InputPlugin, UITextViewDelegate, UITab
         
         // Replace the attributedText with a modified version including the autocompete
         let newAttributedText = textView.attributedText.replacingCharacters(in: highlightedRange, with: newAttributedString)
-        
-        // make background clear for dark mode support
-        newAttributedText.addAttribute(NSAttributedString.Key.backgroundColor,
-                                       value: UIColor.clear,
-                                       range: NSMakeRange(0, newAttributedText.length))
+        if appendSpaceOnCompletion {
+            newAttributedText.append(NSAttributedString(string: " ", attributes: typingTextAttributes))
+        }
         
         // Set to a blank attributed string to prevent keyboard autocorrect from cloberring the insert
         textView.attributedText = NSAttributedString()

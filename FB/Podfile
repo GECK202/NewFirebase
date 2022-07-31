@@ -4,12 +4,14 @@
 target 'FB' do
   use_frameworks!
 
-pod 'Firebase/Core', '~>8'
-pod 'Firebase/Auth', '~>8'
-pod 'Firebase/Database', '~>8'
+pod 'Firebase/Core'
+pod 'Firebase/Auth'
+pod 'Firebase/Database'
 
 pod 'JGProgressHUD'
 
 pod 'MessageKit'
+
+pod 'CryptoSwift'
 
 end

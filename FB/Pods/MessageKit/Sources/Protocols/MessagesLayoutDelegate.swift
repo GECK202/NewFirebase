@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2017-2022 MessageKit
+ Copyright (c) 2017-2019 MessageKit
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,6 @@
  */
 
 import Foundation
-import UIKit
 
 /// A protocol used by the `MessagesCollectionViewFlowLayout` object to determine
 /// the size and layout of a `MessageCollectionViewCell` and its contents.
@@ -52,11 +51,12 @@ public protocol MessagesLayoutDelegate: AnyObject {
     /// Specifies the size to use for a typing indicator view.
     ///
     /// - Parameters:
-    ///   - layout: The `MessagesCollectionViewFlowLayout` layout.
+    ///   - messagesCollectionView: The `MessagesCollectionView` in which this view will be displayed.
     ///
     /// - Note:
-    ///   The default value returned by this method is the width of the `messagesCollectionView` minus insets and a height of 62.
-    func typingIndicatorViewSize(for layout: MessagesCollectionViewFlowLayout) -> CGSize
+    ///   The default value returned by this method is the width of the `messagesCollectionView` and
+    ///   a height of 52.
+    func typingIndicatorViewSize(in messagesCollectionView: MessagesCollectionView) -> CGSize
 
     /// Specifies the top inset to use for a typing indicator view.
     ///
@@ -100,15 +100,6 @@ public protocol MessagesLayoutDelegate: AnyObject {
     ///   The default value returned by this method is zero.
     func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat
 
-    /// Specifies the label alignment for the message bubble's top label.
-    /// - Parameters:
-    ///   - message: The `MessageType` that will be displayed for this cell.
-    ///   - indexPath: The `IndexPath` of the cell.
-    ///   - messagesCollectionView:  The `MessagesCollectionView` in which this cell will be displayed.
-    /// - Returns: Optional LabelAlignment for the message bubble's top label. If nil is returned or the delegate method is not implemented,
-    ///  alignment from MessageSizeCalculator will be used depending if the message is outgoing or incoming
-    func messageTopLabelAlignment(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LabelAlignment?
-
     /// Specifies the height for the `MessageContentCell`'s bottom label.
     ///
     /// - Parameters:
@@ -119,16 +110,7 @@ public protocol MessagesLayoutDelegate: AnyObject {
     /// - Note:
     ///   The default value returned by this method is zero.
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat
-
-    /// Specifies the label alignment for the message bubble's bottom label.
-    /// - Parameters:
-    ///   - message: The `MessageType` that will be displayed for this cell.
-    ///   - indexPath: The `IndexPath` of the cell.
-    ///   - messagesCollectionView:  The `MessagesCollectionView` in which this cell will be displayed.
-    /// - Returns: Optional LabelAlignment for the message bubble's bottom label. If nil is returned or the delegate method is not implemented,
-    ///  alignment from MessageSizeCalculator will be used depending if the message is outgoing or incoming
-    func messageBottomLabelAlignment(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LabelAlignment?
-
+    
     /// Text cell size calculator for messages with MessageType.text.
     ///
     /// - Parameters:
@@ -206,7 +188,7 @@ public protocol MessagesLayoutDelegate: AnyObject {
     ///   The default implementation will return nil. You must override this method if you are using your own cell for messages with MessageType.audio.
     func audioCellSizeCalculator(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CellSizeCalculator?
     
-    /// Contact cell size calculator for messages with MessageType.contact.
+    /// Constact cell size calculator for messages with MessageType.contact.
     ///
     /// - Parameters:
     ///   - message: The contact message
@@ -239,11 +221,8 @@ public extension MessagesLayoutDelegate {
         return .zero
     }
 
-    func typingIndicatorViewSize(for layout: MessagesCollectionViewFlowLayout) -> CGSize {
-        let collectionViewWidth = layout.messagesCollectionView.bounds.width
-        let contentInset = layout.messagesCollectionView.contentInset
-        let inset = layout.sectionInset.horizontal + contentInset.horizontal
-        return CGSize(width: collectionViewWidth - inset, height: 62)
+    func typingIndicatorViewSize(in messagesCollectionView: MessagesCollectionView) -> CGSize {
+        return CGSize(width: messagesCollectionView.bounds.width, height: 48)
     }
 
     func typingIndicatorViewTopInset(in messagesCollectionView: MessagesCollectionView) -> CGFloat {
@@ -262,16 +241,8 @@ public extension MessagesLayoutDelegate {
         return 0
     }
 
-    func messageTopLabelAlignment(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LabelAlignment? {
-        return nil
-    }
-
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 0
-    }
-
-    func messageBottomLabelAlignment(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LabelAlignment? {
-        return nil
     }
     
     func textCellSizeCalculator(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CellSizeCalculator? {

@@ -11,14 +11,14 @@ import JGProgressHUD
 
 class ConversationsViewController: UIViewController {
     
-    private var userList: [ChatAppUser] = []
+    private var userList = [ChatAppUser]()
     
     private let spinner = JGProgressHUD(style: .dark)
     
     private let tableView: UITableView = {
         let table = UITableView()
         table.isHidden = true
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        table.register(UserTableViewCell.self, forCellReuseIdentifier: "cell")
         return table
     }()
     
@@ -32,25 +32,59 @@ class ConversationsViewController: UIViewController {
         return label
     }()
     
+    private var loginObserver: NSObjectProtocol?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        getAllUsers()
-        
+        spinner.show(in: view)
         view.addSubview(tableView)
         view.addSubview(noConversationsLabel)
         setupTableView()
-        fetchConversations()
+        
     }
+    
+    private func startListeningForUsers() {
+
+        if let observer = loginObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+
+        print("starting conversation fetch...")
+        
+        DatabaseManager.shared.getAllUsers(completion: { [weak self] result in
+            if result.count == 0 {
+                self?.tableView.isHidden = true
+                self?.noConversationsLabel.isHidden = false
+                print("нет данных")
+            } else {
+                self?.noConversationsLabel.isHidden = true
+                self?.tableView.isHidden = false
+                self?.userList = result
+
+                DispatchQueue.main.async {
+                    self?.spinner.dismiss()
+                    self?.tableView.reloadData()
+                }
+            }
+        })
+        
+    }
+    
+
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
+        noConversationsLabel.frame = CGRect(x: 10,
+                                            y: (view.height-100)/2,
+                                            width: view.width-20,
+                                            height: 100)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         validateAuth()
-        
+        getAllUsers()
     }
     
     private func validateAuth() {
@@ -59,6 +93,7 @@ class ConversationsViewController: UIViewController {
             let nav = UINavigationController(rootViewController: vc)
             nav.modalPresentationStyle = .fullScreen
             present(nav, animated: false)
+           
         } else { getUserInfo() }
     }
     
@@ -75,7 +110,6 @@ class ConversationsViewController: UIViewController {
             let col = UIColor.fromUIntText(text: user.color)
             strongSelf.view.backgroundColor = col
             print ("name-\(user.name) color-\(col) email-\(user.emailAddress)")
-            
         })
     }
 
@@ -89,14 +123,12 @@ class ConversationsViewController: UIViewController {
     }
     
     private func getAllUsers() {
-        DatabaseManager.shared.getAllUsers(completion: {[weak self] users in
+        startListeningForUsers()
+        loginObserver = NotificationCenter.default.addObserver(forName: .didLogInNotification, object: nil, queue: .main, using: { [weak self] _ in
             guard let strongSelf = self else {
                 return
             }
-            strongSelf.userList = users
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
-            }
+            strongSelf.startListeningForUsers()
         })
     }
         
@@ -108,9 +140,9 @@ extension ConversationsViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = userList[indexPath.row].name
-        cell.accessoryType = .disclosureIndicator
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell",
+                                                     for: indexPath) as! UserTableViewCell
+        cell.configure(user: userList[indexPath.row].self)
         return cell
     }
     
@@ -120,6 +152,14 @@ extension ConversationsViewController: UITableViewDelegate, UITableViewDataSourc
         vc.title = userList[indexPath.row].name
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 110
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
     }
 }
 
