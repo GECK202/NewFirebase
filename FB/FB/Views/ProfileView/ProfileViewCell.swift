@@ -15,8 +15,10 @@ class ProfileViewCell: UITableViewCell {
     
     private let userImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "person.crop.circle.fill"))
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.frame = CGRect(x: 0, y: 0, width: 140, height: 140)
+        imageView.bounds = CGRect(x: 0, y: 0, width: 140, height: 140)
+        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -57,10 +59,18 @@ class ProfileViewCell: UITableViewCell {
         stackView.spacing = 5
         contentView.addSubview(stackView)
         
+        userImageView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 50, paddingBottom: 100, paddingRight: 50, width: 100, height: 100, enableInsets: false)
+        
         stackView.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 240, enableInsets: false)
         
         userNameField.addTarget(self, action: #selector(TextDidChanged), for: UIControl.Event.editingDidEnd)
         
+        //userImageView.frame = CGRect(x: 0, y: 0, width: 140, height: 140)
+        //userImageView.bounds = CGRect(x:0, y: 0, width: userImageView.image!.size.width, height: userImageView.image!.size.height)
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ImageTap(tapGestureRecognizer:)))
+            userImageView.isUserInteractionEnabled = true
+            userImageView.addGestureRecognizer(tapGestureRecognizer)
     }
     
     @objc private func TextDidChanged(){
@@ -68,6 +78,10 @@ class ProfileViewCell: UITableViewCell {
             return
         }
         action(userNameField.text ?? "no name")
+    }
+    
+    @objc private func ImageTap(tapGestureRecognizer: UITapGestureRecognizer) {
+        print("image tap")
     }
     
     required init?(coder: NSCoder) {
