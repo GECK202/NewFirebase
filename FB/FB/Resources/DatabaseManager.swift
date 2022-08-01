@@ -42,14 +42,27 @@ extension DatabaseManager {
     
     
     ///Insert new user to database
-    public func insertUser(with user: ChatAppUser) {
+    public func insertUser(with user: ChatAppUser, competition: ((Bool)->Void)? ) {
         database.child("User").child(user.id).setValue([
             "id": user.id,
             "name": user.name,
             "email": user.emailAddress,
             "color": user.color,
             "status": user.status
-        ])
+        ]) {(error:Error?, ref:DatabaseReference) in
+            
+            if let error = error {
+                print("Data could not be saved: \(error).")
+                if let competition = competition {
+                    competition(false)
+                }
+            } else {
+                print("Data saved successfully!")
+                if let competition = competition {
+                    competition(true)
+                }
+            }
+          }
     }
     
 

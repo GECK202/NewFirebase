@@ -113,15 +113,15 @@ extension UIColor {
     }
     
     var toUInt: UInt {
-        let red = UInt(coreImageColor.red * 255 + 0.5)
-        let green = UInt(coreImageColor.green * 255 + 0.5)
-        let blue = UInt(coreImageColor.blue * 255 + 0.5)
+        
+        let red = UInt(abs(coreImageColor.red) * 255.0 + 0.5)
+        let green = UInt(abs(coreImageColor.green) * 255.0 + 0.5)
+        let blue = UInt(abs(coreImageColor.blue) * 255.0 + 0.5)
+        
         return (red << 16) | (green << 8) | blue
     }
-    
 }
 
 extension Notification.Name {
-    /// Notificaiton  when user logs in
     static let didLogInNotification = Notification.Name("didLogInNotification")
 }

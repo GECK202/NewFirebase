@@ -12,6 +12,8 @@ pod 'JGProgressHUD'
 
 pod 'MessageKit'
 
+pod 'Colorful'
+
 pod 'CryptoSwift'
 
 end

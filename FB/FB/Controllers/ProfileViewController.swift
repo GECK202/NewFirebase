@@ -60,15 +60,47 @@ class ProfileViewController: UIViewController {
         })
     }
     
+    private func colorAction() {
+        print("color action")
+        let vc = ColorViewController()
+        if let textColor = user?.color {
+            vc.userColor = UIColor.fromUIntText(text: textColor)
+        }
+        vc.colorAction = { result in
+            self.user = ChatAppUser(id: self.user!.id, name: self.user!.name, emailAddress: self.user!.emailAddress, color: result, status: self.user!.status)
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+        vc.title = "Цвет аватара"
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: false)
+        
+        
+    }
+    
     private func saveAction() {
-        DatabaseManager.shared.insertUser(with: self.user!)
-        let actionSheet = UIAlertController(title: "Изменения сохранены",
-                                            message: "",
-                                            preferredStyle: .actionSheet)
-        actionSheet.addAction(UIAlertAction(title: "Закрыть",
-                                            style: .cancel,
-                                            handler: nil))
-        self.present(actionSheet, animated: true)
+        DatabaseManager.shared.insertUser(with: self.user!, competition: { isSave in
+            if isSave == true {
+                let actionSheet = UIAlertController(title: "Изменения сохранены",
+                                                    message: "",
+                                                    preferredStyle: .actionSheet)
+                actionSheet.addAction(UIAlertAction(title: "Закрыть",
+                                                    style: .cancel,
+                                                    handler: nil))
+                self.present(actionSheet, animated: true)
+            } else {
+                let actionSheet = UIAlertController(title: "Изменения не сохранены!",
+                                                    message: "",
+                                                    preferredStyle: .alert)
+                actionSheet.addAction(UIAlertAction(title: "Закрыть",
+                                                    style: .cancel,
+                                                    handler: nil))
+                self.present(actionSheet, animated: true)
+            }
+        })
+        
     }
     
     private func logOutAction() {
@@ -117,9 +149,9 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.row {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "profile", for: indexPath) as! ProfileViewCell
-            cell.configure(user: user!, action: { [self] result in
+            cell.configure(user: user!, inputAction: { [self] result in
                 self.user = ChatAppUser(id: self.user!.id, name: result, emailAddress: self.user!.emailAddress, color: self.user!.color, status: self.user!.status)
-            })
+            }, colorAction: colorAction)
             cell.selectionStyle = .none
             return cell
         case 1:
@@ -151,5 +183,3 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         return profileData[indexPath.row].height
     }
 }
-
-

@@ -32,6 +32,8 @@ class StatusViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        statusField.delegate = self
+        
         let stackView = UIStackView(arrangedSubviews: [
             statusLabel,
             statusField])
@@ -43,15 +45,15 @@ class StatusViewCell: UITableViewCell {
         
         stackView.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 90, enableInsets: false)
         
-        statusField.addTarget(self, action: #selector(TextDidChanged), for: UIControl.Event.editingDidEnd)
+        statusField.addTarget(self, action: #selector(TextFieldDidChange(textField:)), for: .editingChanged)
         
     }
     
-    @objc private func TextDidChanged(){
+    @objc private func TextFieldDidChange(textField: UITextField) {
         guard let action = self.action else {
             return
         }
-        action(statusField.text ?? "no status")
+        action(textField.text ?? "no status")
     }
     
     required init?(coder: NSCoder) {
@@ -65,4 +67,25 @@ class StatusViewCell: UITableViewCell {
         self.action = action
     }
     
+}
+
+
+extension StatusViewCell: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        if textField == statusField {
+            statusLabel.becomeFirstResponder()
+        }
+        
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.layer.borderWidth = 1
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.layer.borderWidth = 0
+    }
 }

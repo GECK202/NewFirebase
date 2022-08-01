@@ -162,7 +162,7 @@
         <image name="person" catalog="system" width="128" height="117"/>
         <image name="text.bubble" catalog="system" width="128" height="110"/>
         <namedColor name="BaseColor">
-            <color red="0.35294117647058826" green="0.67843137254901964" blue="0.73333333333333328" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.3529999852180481" green="0.67799997329711914" blue="0.73299998044967651" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

@@ -11,7 +11,9 @@ class ProfileViewCell: UITableViewCell {
   
     static let identifier = "profile"
     
-    var action: ((String)->Void)?
+    private var inputAction: ((String)->Void)?
+    
+    private var colorAction: (()->Void)?
     
     private let userImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "person.crop.circle.fill"))
@@ -42,11 +44,14 @@ class ProfileViewCell: UITableViewCell {
         field.autocorrectionType = .no
         field.returnKeyType = .done
         field.font = .systemFont(ofSize: 26, weight: .semibold)
+        field.layer.borderColor = UIColor(named: "BaseColor")?.cgColor
         return field
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        userNameField.delegate = self
         
         let stackView = UIStackView(arrangedSubviews: [
             userImageView,
@@ -63,37 +68,59 @@ class ProfileViewCell: UITableViewCell {
         
         stackView.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 240, enableInsets: false)
         
-        userNameField.addTarget(self, action: #selector(TextDidChanged), for: UIControl.Event.editingDidEnd)
-        
-        //userImageView.frame = CGRect(x: 0, y: 0, width: 140, height: 140)
-        //userImageView.bounds = CGRect(x:0, y: 0, width: userImageView.image!.size.width, height: userImageView.image!.size.height)
+        userNameField.addTarget(self, action: #selector(TextFieldDidChange(textField:)), for: .editingChanged)
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ImageTap(tapGestureRecognizer:)))
             userImageView.isUserInteractionEnabled = true
             userImageView.addGestureRecognizer(tapGestureRecognizer)
     }
     
-    @objc private func TextDidChanged(){
-        guard let action = self.action else {
+    @objc private func TextFieldDidChange(textField: UITextField) {
+        guard let action = self.inputAction else {
             return
         }
-        action(userNameField.text ?? "no name")
+        action(textField.text ?? "no name")
     }
     
     @objc private func ImageTap(tapGestureRecognizer: UITapGestureRecognizer) {
         print("image tap")
+        guard let action = self.colorAction else {
+            return
+        }
+        action()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-
-    public func configure(user: ChatAppUser, action: @escaping (String)->Void) {
+    public func configure(user: ChatAppUser, inputAction: @escaping (String)->Void, colorAction: @escaping ()->Void) {
         userNameField.text = user.name
         userNameLabel.text = "Имя"
         emailLabel.text = user.emailAddress
         userImageView.tintColor = UIColor.fromUIntText(text: user.color)
-        self.action = action
+        self.inputAction = inputAction
+        self.colorAction = colorAction
+    }
+}
+
+
+extension ProfileViewCell: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        if textField == userNameField {
+            emailLabel.becomeFirstResponder()
+        }
+        
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.layer.borderWidth = 1
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.layer.borderWidth = 0
     }
 }

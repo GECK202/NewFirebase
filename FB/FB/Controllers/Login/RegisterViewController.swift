@@ -194,7 +194,7 @@ class RegisterViewController: UIViewController {
             let uid = Auth.auth().currentUser?.uid ?? ""
             let user = ChatAppUser(id: uid, name: user, emailAddress: email, color: String(UIColor.random().toUInt), status: "no status")
             
-            DatabaseManager.shared.insertUser(with: user)
+            DatabaseManager.shared.insertUser(with: user, competition: nil)
             
             strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         })

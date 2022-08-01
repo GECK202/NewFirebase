@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		210EF791998271073145C159 /* Pods_FB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE9C4912F0E6BBE7450F76E5 /* Pods_FB.framework */; };
+		262FBFC8289634230063BF05 /* ColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262FBFC7289634230063BF05 /* ColorViewController.swift */; };
 		2690EBD12892E24B001F6A69 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2690EBD02892E24B001F6A69 /* DatabaseManager.swift */; };
 		2690EBD32892E5A0001F6A69 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2690EBD22892E5A0001F6A69 /* ChatViewController.swift */; };
 		26CA64312891A2D8008A7E78 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26CA64302891A2D8008A7E78 /* AppDelegate.swift */; };
@@ -29,10 +31,10 @@
 		26E5983D2895E38800FD65F0 /* ChatAppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E5983C2895E38800FD65F0 /* ChatAppUser.swift */; };
 		26E5983F2896047700FD65F0 /* StatusViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E5983E2896047700FD65F0 /* StatusViewCell.swift */; };
 		26E59842289608A900FD65F0 /* ButtonsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E59841289608A900FD65F0 /* ButtonsViewCell.swift */; };
-		63F7B0F9DDD3010FAEAC36D9 /* Pods_FB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 547112C1D6E03D4F6188CCA8 /* Pods_FB.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		262FBFC7289634230063BF05 /* ColorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorViewController.swift; sourceTree = "<group>"; };
 		2690EBD02892E24B001F6A69 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		2690EBD22892E5A0001F6A69 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		26CA642D2891A2D8008A7E78 /* FB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FB.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,9 +60,9 @@
 		26E5983C2895E38800FD65F0 /* ChatAppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatAppUser.swift; sourceTree = "<group>"; };
 		26E5983E2896047700FD65F0 /* StatusViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusViewCell.swift; sourceTree = "<group>"; };
 		26E59841289608A900FD65F0 /* ButtonsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsViewCell.swift; sourceTree = "<group>"; };
-		428449E6734D05C9AEAC5490 /* Pods-FB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FB.release.xcconfig"; path = "Target Support Files/Pods-FB/Pods-FB.release.xcconfig"; sourceTree = "<group>"; };
-		547112C1D6E03D4F6188CCA8 /* Pods_FB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B0B0524CF30F3FEFDCEFED54 /* Pods-FB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FB.debug.xcconfig"; path = "Target Support Files/Pods-FB/Pods-FB.debug.xcconfig"; sourceTree = "<group>"; };
+		617E15091BCD0E0BD288601A /* Pods-FB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FB.debug.xcconfig"; path = "Target Support Files/Pods-FB/Pods-FB.debug.xcconfig"; sourceTree = "<group>"; };
+		7B72DAB2AF57F11214CDDEB2 /* Pods-FB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FB.release.xcconfig"; path = "Target Support Files/Pods-FB/Pods-FB.release.xcconfig"; sourceTree = "<group>"; };
+		AE9C4912F0E6BBE7450F76E5 /* Pods_FB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63F7B0F9DDD3010FAEAC36D9 /* Pods_FB.framework in Frameworks */,
+				210EF791998271073145C159 /* Pods_FB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,7 +84,7 @@
 				26CA642F2891A2D8008A7E78 /* FB */,
 				26CA642E2891A2D8008A7E78 /* Products */,
 				FFDFB642E7ED660F9BFA61D2 /* Pods */,
-				ABC3BDB571BC3748BA5E9DE0 /* Frameworks */,
+				44BEAF630E2013AA30E44D27 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -184,14 +186,15 @@
 				26E598382895CD2200FD65F0 /* ProfileViewCell.swift */,
 				26E5983E2896047700FD65F0 /* StatusViewCell.swift */,
 				26E59841289608A900FD65F0 /* ButtonsViewCell.swift */,
+				262FBFC7289634230063BF05 /* ColorViewController.swift */,
 			);
 			path = ProfileView;
 			sourceTree = "<group>";
 		};
-		ABC3BDB571BC3748BA5E9DE0 /* Frameworks */ = {
+		44BEAF630E2013AA30E44D27 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				547112C1D6E03D4F6188CCA8 /* Pods_FB.framework */,
+				AE9C4912F0E6BBE7450F76E5 /* Pods_FB.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -199,8 +202,8 @@
 		FFDFB642E7ED660F9BFA61D2 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				B0B0524CF30F3FEFDCEFED54 /* Pods-FB.debug.xcconfig */,
-				428449E6734D05C9AEAC5490 /* Pods-FB.release.xcconfig */,
+				617E15091BCD0E0BD288601A /* Pods-FB.debug.xcconfig */,
+				7B72DAB2AF57F11214CDDEB2 /* Pods-FB.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -212,11 +215,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 26CA64412891A2D9008A7E78 /* Build configuration list for PBXNativeTarget "FB" */;
 			buildPhases = (
-				68AF719629BB82F694411290 /* [CP] Check Pods Manifest.lock */,
+				91E7DFDEC6FCA4B802035148 /* [CP] Check Pods Manifest.lock */,
 				26CA64292891A2D8008A7E78 /* Sources */,
 				26CA642A2891A2D8008A7E78 /* Frameworks */,
 				26CA642B2891A2D8008A7E78 /* Resources */,
-				AF00D7D4DD7C0C430C896F5E /* [CP] Embed Pods Frameworks */,
+				BDC86A3AA2D13B1F577950A3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -275,7 +278,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		68AF719629BB82F694411290 /* [CP] Check Pods Manifest.lock */ = {
+		91E7DFDEC6FCA4B802035148 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -297,7 +300,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AF00D7D4DD7C0C430C896F5E /* [CP] Embed Pods Frameworks */ = {
+		BDC86A3AA2D13B1F577950A3 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -330,6 +333,7 @@
 				26E5983B2895DE5900FD65F0 /* ProfileCellViewModel.swift in Sources */,
 				26CA64352891A2D8008A7E78 /* ConversationViewController.swift in Sources */,
 				26CA64502891A734008A7E78 /* ProfileViewController.swift in Sources */,
+				262FBFC8289634230063BF05 /* ColorViewController.swift in Sources */,
 				26CA64312891A2D8008A7E78 /* AppDelegate.swift in Sources */,
 				26CA64332891A2D8008A7E78 /* SceneDelegate.swift in Sources */,
 				26E598392895CD2200FD65F0 /* ProfileViewCell.swift in Sources */,
@@ -484,7 +488,7 @@
 		};
 		26CA64422891A2D9008A7E78 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B0B0524CF30F3FEFDCEFED54 /* Pods-FB.debug.xcconfig */;
+			baseConfigurationReference = 617E15091BCD0E0BD288601A /* Pods-FB.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -514,7 +518,7 @@
 		};
 		26CA64432891A2D9008A7E78 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 428449E6734D05C9AEAC5490 /* Pods-FB.release.xcconfig */;
+			baseConfigurationReference = 7B72DAB2AF57F11214CDDEB2 /* Pods-FB.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
