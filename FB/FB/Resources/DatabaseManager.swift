@@ -22,7 +22,6 @@ final class DatabaseManager {
         safeEmail = safeEmail.replacingOccurrences(of: "@", with: "^")
         return safeEmail
     }
-        
 }
 
 extension DatabaseManager {
@@ -39,7 +38,6 @@ extension DatabaseManager {
             competition(true)
         })
     }
-    
     
     ///Insert new user to database
     public func insertUser(with user: ChatAppUser, competition: ((Bool)->Void)? ) {
@@ -90,12 +88,12 @@ extension DatabaseManager {
     
     public func getAllUsers(completion: @escaping (([ChatAppUser])->Void)) {
         var users: [ChatAppUser] = []
+        
         self.database.child("User").observeSingleEvent(of: .value, with: { snapshot in
             guard let dic = snapshot.value as? NSDictionary else {
                 completion(users)
                 return
             }
-            print("\(dic)")
             for (_, v) in dic {
                 guard let value = v as? NSDictionary, let id = value["id"] as? String else {
                     continue
@@ -105,7 +103,36 @@ extension DatabaseManager {
                 let textColor = value["color"] as? String ?? ""
                 let status = value["status"] as? String ?? ""
                 users.append(ChatAppUser(id: id, name: name, emailAddress: email, color: textColor, status: status))
-                    print("\(name), \(email), \(textColor), \(status)")
+            }
+            completion(users)
+        }) { error in
+            print(error.localizedDescription)
+        }
+    }
+    
+    public func findUsers(findString: String, completion: @escaping (([ChatAppUser])->Void)) {
+        var users: [ChatAppUser] = []
+        
+        let query = self.database.child("User").queryOrdered(byChild: "email").queryStarting(atValue: findString).queryLimited(toFirst: 20)
+        
+        let userEmail = UserDefaults.standard.string(forKey: "email")
+        
+        query.observeSingleEvent(of: .value, with: { snapshot in
+            guard let dic = snapshot.value as? NSDictionary else {
+                completion(users)
+                return
+            }
+            for (_, v) in dic {
+                guard let value = v as? NSDictionary, let id = value["id"] as? String else {
+                    continue
+                }
+                let email = value["email"] as? String ?? ""
+                if email.hasPrefix(findString) && (email != userEmail) {
+                    let name = value["name"] as? String ?? ""
+                    let textColor = value["color"] as? String ?? ""
+                    let status = value["status"] as? String ?? ""
+                    users.append(ChatAppUser(id: id, name: name, emailAddress: email, color: textColor, status: status))
+                }
             }
             completion(users)
         }) { error in

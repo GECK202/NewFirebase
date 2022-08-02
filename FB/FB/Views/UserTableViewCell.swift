@@ -8,7 +8,8 @@
 import UIKit
 
 class UserTableViewCell: UITableViewCell {
-  
+    
+    static let identifier = "user"
     
     private let userImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "person.crop.circle.fill"))
@@ -64,8 +65,12 @@ class UserTableViewCell: UITableViewCell {
         
     }
 
-    public func configure(user: ChatAppUser) {
-        userStatusLabel.text = user.status
+    public func configure(user: ChatAppUser, viewStatus: Bool = true) {
+        if viewStatus {
+            userStatusLabel.text = user.status
+        } else {
+            userStatusLabel.text = user.emailAddress
+        }
         userNameLabel.text = user.name
         userImageView.tintColor = UIColor.fromUIntText(text: user.color)
     }

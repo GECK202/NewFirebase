@@ -44,9 +44,6 @@ extension UIView {
             let insets = self.safeAreaInsets
             topInset = insets.top
             bottomInset = insets.bottom
-            
-            print("Top: \(topInset)")
-            print("bottom: \(bottomInset)")
         }
         
         translatesAutoresizingMaskIntoConstraints = false
@@ -99,7 +96,6 @@ extension UIColor {
         let red = CGFloat(col >> 16) / 255.0
         let green = CGFloat((col & 0xFFFF) >> 8) / 255.0
         let blue = CGFloat(col & 0x0000FF) / 255.0
-        print("\(col >> 16) \((col & 0xFFFF) >> 8) \(col & 0x0000FF)")
         return UIColor(
            red:   red,
            green: green,

@@ -23,6 +23,7 @@
 		26CA64502891A734008A7E78 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26CA644F2891A734008A7E78 /* ProfileViewController.swift */; };
 		26CA64532891ACB7008A7E78 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26CA64522891ACB7008A7E78 /* Extensions.swift */; };
 		26CA64552891C02C008A7E78 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26CA64542891C02C008A7E78 /* GoogleService-Info.plist */; };
+		26CB782528993ECD00623678 /* SearchViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26CB782428993ECD00623678 /* SearchViewCell.swift */; };
 		26E5983328958FE600FD65F0 /* ConversationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E5983228958FE600FD65F0 /* ConversationModel.swift */; };
 		26E598352895968700FD65F0 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E598342895968700FD65F0 /* SearchResult.swift */; };
 		26E598372895AA8B00FD65F0 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E598362895AA8B00FD65F0 /* UserTableViewCell.swift */; };
@@ -52,6 +53,7 @@
 		26CA64522891ACB7008A7E78 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		26CA64542891C02C008A7E78 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		26CA64572891C2FC008A7E78 /* firebase */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = firebase; path = ../../firebase; sourceTree = "<group>"; };
+		26CB782428993ECD00623678 /* SearchViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewCell.swift; sourceTree = "<group>"; };
 		26E5983228958FE600FD65F0 /* ConversationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationModel.swift; sourceTree = "<group>"; };
 		26E598342895968700FD65F0 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		26E598362895AA8B00FD65F0 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
@@ -146,10 +148,11 @@
 		26CA64472891A3E7008A7E78 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				26CA64482891A4D8008A7E78 /* Storyboards */,
 				26CA64392891A2D9008A7E78 /* Assets.xcassets */,
+				26CA64482891A4D8008A7E78 /* Storyboards */,
 				26E598362895AA8B00FD65F0 /* UserTableViewCell.swift */,
 				26E598402896087000FD65F0 /* ProfileView */,
+				26CB782328993C4800623678 /* SearchView */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -178,6 +181,14 @@
 				26CA64572891C2FC008A7E78 /* firebase */,
 			);
 			name = Packages;
+			sourceTree = "<group>";
+		};
+		26CB782328993C4800623678 /* SearchView */ = {
+			isa = PBXGroup;
+			children = (
+				26CB782428993ECD00623678 /* SearchViewCell.swift */,
+			);
+			path = SearchView;
 			sourceTree = "<group>";
 		};
 		26E598402896087000FD65F0 /* ProfileView */ = {
@@ -340,6 +351,7 @@
 				26E59842289608A900FD65F0 /* ButtonsViewCell.swift in Sources */,
 				26E5983D2895E38800FD65F0 /* ChatAppUser.swift in Sources */,
 				2690EBD32892E5A0001F6A69 /* ChatViewController.swift in Sources */,
+				26CB782528993ECD00623678 /* SearchViewCell.swift in Sources */,
 				26E598352895968700FD65F0 /* SearchResult.swift in Sources */,
 				2690EBD12892E24B001F6A69 /* DatabaseManager.swift in Sources */,
 				26E5983F2896047700FD65F0 /* StatusViewCell.swift in Sources */,

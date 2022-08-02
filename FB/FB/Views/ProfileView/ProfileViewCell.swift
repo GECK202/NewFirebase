@@ -68,21 +68,21 @@ class ProfileViewCell: UITableViewCell {
         
         stackView.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 240, enableInsets: false)
         
-        userNameField.addTarget(self, action: #selector(TextFieldDidChange(textField:)), for: .editingChanged)
+        userNameField.addTarget(self, action: #selector(userNameFieldDidChange(textField:)), for: .editingChanged)
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ImageTap(tapGestureRecognizer:)))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTap(tapGestureRecognizer:)))
             userImageView.isUserInteractionEnabled = true
             userImageView.addGestureRecognizer(tapGestureRecognizer)
     }
     
-    @objc private func TextFieldDidChange(textField: UITextField) {
+    @objc private func userNameFieldDidChange(textField: UITextField) {
         guard let action = self.inputAction else {
             return
         }
         action(textField.text ?? "no name")
     }
     
-    @objc private func ImageTap(tapGestureRecognizer: UITapGestureRecognizer) {
+    @objc private func imageTap(tapGestureRecognizer: UITapGestureRecognizer) {
         print("image tap")
         guard let action = self.colorAction else {
             return

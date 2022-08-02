@@ -59,8 +59,8 @@ class ColorViewController: UIViewController {
         navigationController?.navigationBar.backgroundColor = UIColor(named: "BaseColor")
         
         //navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.TextStyle.largeTitle]
-        if let navFont = UIFont(name: "HelveticaNeue", size: 30.0) {
-            let navBarAttributesDictionary: [NSAttributedString.Key: AnyObject]? = [NSAttributedString.Key.font: navFont]
+        if let navFont = UIFont(name: "HelveticaNeue", size: 25.0) {
+            let navBarAttributesDictionary: [NSAttributedString.Key: AnyObject]? = [NSAttributedString.Key.font: navFont, NSAttributedString.Key.foregroundColor: UIColor.white]
             navigationController?.navigationBar.titleTextAttributes = navBarAttributesDictionary
         }
         

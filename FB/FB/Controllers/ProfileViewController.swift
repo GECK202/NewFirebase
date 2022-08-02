@@ -100,7 +100,6 @@ class ProfileViewController: UIViewController {
                 self.present(actionSheet, animated: true)
             }
         })
-        
     }
     
     private func logOutAction() {
@@ -165,19 +164,14 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "buttons", for: indexPath) as! ButtonsViewCell
             cell.configure(saveAction: self.saveAction, logOutAction: self.logOutAction)
+            cell.selectionStyle = .none
             return cell
         }
     }
-    
-    //*
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        //guard let action = profileData[indexPath.row].action else {
-        //    return
-       // }
-       // action()
-        
-    }//*/
+    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return profileData[indexPath.row].height

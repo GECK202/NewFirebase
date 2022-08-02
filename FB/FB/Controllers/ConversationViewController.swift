@@ -18,7 +18,7 @@ class ConversationsViewController: UIViewController {
     private let tableView: UITableView = {
         let table = UITableView()
         table.isHidden = true
-        table.register(UserTableViewCell.self, forCellReuseIdentifier: "cell")
+        table.register(UserTableViewCell.self, forCellReuseIdentifier: UserTableViewCell.identifier)
         return table
     }()
     
@@ -40,38 +40,8 @@ class ConversationsViewController: UIViewController {
         view.addSubview(tableView)
         view.addSubview(noConversationsLabel)
         setupTableView()
-        
     }
-    
-    private func startListeningForUsers() {
 
-        if let observer = loginObserver {
-            NotificationCenter.default.removeObserver(observer)
-        }
-
-        print("starting conversation fetch...")
-        
-        DatabaseManager.shared.getAllUsers(completion: { [weak self] result in
-            if result.count == 0 {
-                self?.tableView.isHidden = true
-                self?.noConversationsLabel.isHidden = false
-                print("нет данных")
-            } else {
-                self?.noConversationsLabel.isHidden = true
-                self?.tableView.isHidden = false
-                self?.userList = result
-
-                DispatchQueue.main.async {
-                    self?.spinner.dismiss()
-                    self?.tableView.reloadData()
-                }
-            }
-        })
-        
-    }
-    
-
-    
     override func viewDidLayoutSubviews() {
         
         super.viewDidLayoutSubviews()
@@ -94,7 +64,6 @@ class ConversationsViewController: UIViewController {
             let nav = UINavigationController(rootViewController: vc)
             nav.modalPresentationStyle = .fullScreen
             present(nav, animated: false)
-           
         } else { getUserInfo() }
     }
     
@@ -132,7 +101,33 @@ class ConversationsViewController: UIViewController {
             strongSelf.startListeningForUsers()
         })
     }
+
+    private func startListeningForUsers() {
+        if let observer = loginObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+
+        print("starting conversation fetch...")
         
+        DatabaseManager.shared.getAllUsers(completion: { [weak self] result in
+            if result.count == 0 {
+                self?.tableView.isHidden = true
+                self?.noConversationsLabel.isHidden = false
+                print("нет данных")
+            } else {
+                self?.noConversationsLabel.isHidden = true
+                self?.tableView.isHidden = false
+                self?.userList = result
+
+                DispatchQueue.main.async {
+                    self?.spinner.dismiss()
+                    self?.tableView.reloadData()
+                }
+            }
+        })
+        
+    }
+    
 }
 
 extension ConversationsViewController: UITableViewDelegate, UITableViewDataSource {
@@ -141,7 +136,7 @@ extension ConversationsViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell",
+        let cell = tableView.dequeueReusableCell(withIdentifier: UserTableViewCell.identifier,
                                                      for: indexPath) as! UserTableViewCell
         cell.configure(user: userList[indexPath.row].self)
         return cell

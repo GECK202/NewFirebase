@@ -45,11 +45,11 @@ class StatusViewCell: UITableViewCell {
         
         stackView.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 90, enableInsets: false)
         
-        statusField.addTarget(self, action: #selector(TextFieldDidChange(textField:)), for: .editingChanged)
+        statusField.addTarget(self, action: #selector(statusFieldDidChange(textField:)), for: .editingChanged)
         
     }
     
-    @objc private func TextFieldDidChange(textField: UITextField) {
+    @objc private func statusFieldDidChange(textField: UITextField) {
         guard let action = self.action else {
             return
         }
