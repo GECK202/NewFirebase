@@ -29,7 +29,16 @@ class ProfileViewController: UIViewController {
         setProfileData()
     }
     
+   /*
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setProfileData()
+    }
+    */
+    
+    
     private func setProfileData() {
+        //print(Auth.auth().currentUser?.uid)
         guard let uid = Auth.auth().currentUser?.uid else {
             print("Неизвестная ошибка!")
             return
@@ -39,6 +48,7 @@ class ProfileViewController: UIViewController {
                 return
             }
             strongSelf.user = user
+            strongSelf.profileData.removeAll()
             strongSelf.profileData.append(
                 ProfileCellViewModel(type: .info,
                                      height: 250,
@@ -51,8 +61,6 @@ class ProfileViewController: UIViewController {
                 ProfileCellViewModel(type: .buttons,
                                      height: 80,
                                      cellIdentifier: ButtonsViewCell.identifier))
-                
-                                     
                                      
             DispatchQueue.main.async {
                 strongSelf.tableView.reloadData()
@@ -67,7 +75,12 @@ class ProfileViewController: UIViewController {
             vc.userColor = UIColor.fromUIntText(text: textColor)
         }
         vc.colorAction = { result in
+            
+            
             self.user = ChatAppUser(id: self.user!.id, name: self.user!.name, emailAddress: self.user!.emailAddress, color: result, status: self.user!.status)
+            
+            print("picker result=\(result) user = \(self.user)")
+            
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -76,8 +89,6 @@ class ProfileViewController: UIViewController {
         let nav = UINavigationController(rootViewController: vc)
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: false)
-        
-        
     }
     
     private func saveAction() {
@@ -130,8 +141,6 @@ class ProfileViewController: UIViewController {
         
         self.present(actionSheet, animated: true)
     }
-
-    
     
     func createTableHeader()->UIView? {
         let view = UIView()

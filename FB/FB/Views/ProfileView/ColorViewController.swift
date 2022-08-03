@@ -118,6 +118,7 @@ class ColorViewController: UIViewController {
         guard let action = self.colorAction else {
             return
         }
+        print("color picker action start")
         action(String(colorPicker.color.toUInt))
         self.navigationController?.dismiss(animated: false, completion: nil)
     }

@@ -56,6 +56,7 @@ class ConversationsViewController: UIViewController {
         super.viewDidAppear(animated)
         validateAuth()
         getAllUsers()
+        tableView.reloadData()
     }
     
     private func validateAuth() {
@@ -146,6 +147,7 @@ extension ConversationsViewController: UITableViewDelegate, UITableViewDataSourc
         tableView.deselectRow(at: indexPath, animated: true)
         let vc = ChatViewController()
         vc.title = userList[indexPath.row].name
+        vc.configure(recipient: userList[indexPath.row])
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
     }

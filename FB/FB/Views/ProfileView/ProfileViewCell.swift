@@ -108,11 +108,9 @@ class ProfileViewCell: UITableViewCell {
 extension ProfileViewCell: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
         if textField == userNameField {
             emailLabel.becomeFirstResponder()
         }
-        
         return true
     }
     

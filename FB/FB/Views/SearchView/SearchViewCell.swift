@@ -57,7 +57,7 @@ class SearchViewCell: UITableViewCell {
     }
     
     @objc private func searchFieldDidChange(textField: UITextField) {
-        guard let action = self.searchAction, let findText = textField.text, findText != "" else {
+        guard let action = self.searchAction, let findText = textField.text else {//}, findText != "" else {
             return
         }
         action(findText)

@@ -11,11 +11,11 @@ import JGProgressHUD
 class NewConversationViewController: UIViewController {
 
     public var completion: ((SearchResult) -> (Void))?
-    
+
     private let spinner = JGProgressHUD(style: .dark)
-    
+
     private var userList = [ChatAppUser]()
-    
+
     private let tableView: UITableView = {
         let table = UITableView()
         table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -30,18 +30,22 @@ class NewConversationViewController: UIViewController {
         view.addSubview(tableView)
         setupTableView()
     }
-    
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tableView.reloadData()
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
     }
-    
+
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
     }
 
-    
     private func findUsers(findString: String) {
         self.spinner.show(in: self.view)
         DatabaseManager.shared.findUsers(findString: findString, completion: { [weak self] result in
@@ -82,17 +86,18 @@ extension NewConversationViewController: UITableViewDelegate, UITableViewDataSou
             }
         }
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if (indexPath.row > 0) && (userList.count > 0) {
             let vc = ChatViewController()
             vc.title = userList[indexPath.row - 1].name
+            vc.configure(recipient: userList[indexPath.row - 1])
             vc.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(vc, animated: true)
         }
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
             return 60
@@ -100,7 +105,7 @@ extension NewConversationViewController: UITableViewDelegate, UITableViewDataSou
             return 110
         }
     }
-    
+
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
     }
