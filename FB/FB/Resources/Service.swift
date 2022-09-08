@@ -9,23 +9,28 @@ import Foundation
 import CryptoSwift
 
 public func crypt(message: String, key: String)->String {
-    
-    return message
+    let cryptString = try! aesEncrypt(s: message, key: key)
+    return cryptString
 }
 
 public func decrypt(message: String, key: String)->String {
-    return message
+    let decryptString = try! aesDecrypt(cryptString: message, key: key)
+    return decryptString
 }
 
 public func generateKey()->String {
+    /*
     let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?"
     var s = ""
-    for _ in 0 ..< 16{
+    for _ in 0 ..< 12{
         //Unicode.Scalar(value)!
         s.append(letters.randomElement()!)
     }
     return s
-    //return "ZgPPU1hn8?gt"
+    */
+    
+    
+    return key
 }
 
 public func getCurTime()->String {
@@ -51,12 +56,12 @@ public func getDate(from timeString: String)->Date {
 
 
 
-
+//*
 func cryptTest() {
     let key = generateKey()//"bbC2H19lkVbQDfak" // length == 16
     let s = "hello привет"
     let enc = try! aesEncrypt2(s: s, key: key)
-    //let dec = try! aesDecrypt2(cryptString: enc, key: key)
+    let dec = try! aesDecrypt2(cryptString: enc, key: key)
 
     print(s) // string to encrypt
     print("enc:\(enc)") //1nkk47zTcgJaYSf2Nkspt1BFO5VmVx2PdUtdz9NJHDg=
@@ -64,7 +69,7 @@ func cryptTest() {
     //print("\(s == dec)") // true
 
 }
-
+//*/
 //extension String {
     /*
     func aesEncrypt(key: String) throws -> String {

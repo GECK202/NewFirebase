@@ -42,7 +42,7 @@ class ConversationsViewController: UIViewController {
         setupTableView()
         
         
-        cryptTest();
+        //cryptTest();
         
     }
 

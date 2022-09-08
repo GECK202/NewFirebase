@@ -215,7 +215,7 @@ extension DatabaseManager {
 
 extension DatabaseManager {
     
-    private func getUserKey(for users: String, at time: String, completion: @escaping (String)->Void) {
+    private func setUserKey(for users: String, at time: String, completion: @escaping (String)->Void) {
         let query = database.child("UsersKey").queryOrdered(byChild: "users").queryEqual(toValue: users)
         
         query.observeSingleEvent(of: .value, with: { snapshot in
@@ -255,6 +255,26 @@ extension DatabaseManager {
         database.child("UsersKey").updateChildValues(["\(uid)": data])
     }
     
+    private func getUserKey(for users: String, completion: @escaping (String)->Void) {
+        let query = database.child("UsersKey").queryOrdered(byChild: "users").queryEqual(toValue: users)
+        
+        query.observeSingleEvent(of: .value, with: { snapshot in
+            guard let dic = snapshot.value as? NSDictionary else {
+                completion("")
+                return
+            }
+            for (_, v) in dic {
+                guard let value = v as? NSDictionary, let key = value["KEY"] as? String else {
+                    continue
+                }
+                completion(key)
+                return
+            }
+        }) { error in
+            print(error.localizedDescription)
+        }
+    }
+    
 }
 
 //MARK: save message
@@ -268,7 +288,7 @@ extension DatabaseManager {
         let arr = [recipient, userEmail].sorted(by: <)
         let users = String("\(arr[0]) \(arr[1])")
         let time = getCurTime()
-        self.getUserKey(for: users, at: time, completion: { key in
+        self.setUserKey(for: users, at: time, completion: { key in
             guard let uid = self.database.child("Messages").childByAutoId().key else {
                 print("ОШИБКА ПОЛУЧЕНИЯ ID UsersKey!")
                 completion(false)
@@ -289,34 +309,31 @@ extension DatabaseManager {
         }
         let arr = [recipient, userEmail].sorted(by: <)
         let users = String("\(arr[0]) \(arr[1])")
-        let query = self.database.child("Messages").queryOrdered(byChild: "SenderRecipient").queryEqual(toValue: users) //
-        query.observe(.value, with: {snapshot in
-            guard let dic = snapshot.value as? NSDictionary else {
-                completion(messages)
-                return
-            }
-            for (k, v) in dic {
-                guard let value = v as? NSDictionary, let mid = k as? String else {
-                    continue
+        
+        self.getUserKey(for: users, completion: { key in
+            let query = self.database.child("Messages").queryOrdered(byChild: "SenderRecipient").queryEqual(toValue: users) //
+            query.observe(.value, with: {snapshot in
+                guard let dic = snapshot.value as? NSDictionary else {
+                    completion(messages)
+                    return
                 }
-                //let sendRec = value["SenderRecipient"] as? String ?? ""
-                //if sendRec == users {
+                for (k, v) in dic {
+                    guard let value = v as? NSDictionary, let mid = k as? String else {
+                        continue
+                    }
                     let text = value["Message"] as? String ?? ""
                     let sender = value["Sender"] as? String ?? ""
                     let time = value["time"] as? String ?? ""
-                    let mes = MessageModel(id: mid, text: text, sender: sender, time: time)
+                    let mes = MessageModel(id: mid, text: decrypt(message: text, key: key), sender: sender, time: time)
                     messages.append(mes)
-               // }
+                }
+                completion(messages.sorted{ $0.time < $1.time })
+            }) { error in
+                print(error.localizedDescription)
             }
-            completion(messages.sorted{ $0.time < $1.time })
-        }) { error in
-            print(error.localizedDescription)
-        }
-        
+        })
     }
 }
-
-
 
 extension DatabaseManager {
     

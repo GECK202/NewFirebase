@@ -113,8 +113,8 @@ class ProfileViewController: UIViewController {
         })
     }
     
-    private func logOutAction() {
-        
+    private func logOutAction()
+    {
         let actionSheet = UIAlertController(title: "Сменить профиль",
                                             message: "",
                                             preferredStyle: .actionSheet)
@@ -125,11 +125,15 @@ class ProfileViewController: UIViewController {
                 return
             }
             do {
+                
                 try FirebaseAuth.Auth.auth().signOut()
                 let vc = LoginViewController()
                 let nav = UINavigationController(rootViewController: vc)
                 nav.modalPresentationStyle = .fullScreen
                 strongSelf.present(nav, animated: false)
+                DispatchQueue.main.async {
+                    strongSelf.tabBarController?.selectedIndex = 0
+                }
             } catch {
                 print("Ошибка выхода!")
             }
@@ -141,6 +145,7 @@ class ProfileViewController: UIViewController {
         
         self.present(actionSheet, animated: true)
     }
+
     
     func createTableHeader()->UIView? {
         let view = UIView()
