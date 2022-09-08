@@ -114,6 +114,60 @@ extension DatabaseManager {
         }
     }
     
+    public func findContacts(completion: @escaping(([ChatAppUser])->Void)) {
+        var users: [ChatAppUser] = []
+        
+        let query = self.database.child("UsersKey")
+        
+        
+        guard let userEmail = UserDefaults.standard.string(forKey: "email") else {
+            completion(users)
+            return
+        }
+        
+        query.observeSingleEvent(of: .value, with: {snapshot in
+            guard let dic = snapshot.value as? NSDictionary else {
+                completion(users)
+                return
+            }
+            for (_, v) in dic {
+                guard let value = v as? NSDictionary, let usersEmailString = value["users"] as? String else {
+                    continue
+                }
+                let usersEmail:[String] = usersEmailString.components(separatedBy: " ")
+                var contactEmail: String?
+                if (usersEmail[0] == userEmail) {
+                    contactEmail = usersEmail[1]
+                }
+                if (usersEmail[1] == userEmail) {
+                    contactEmail = usersEmail[0]
+                }
+                guard let contactEmail = contactEmail else {
+                    continue
+                }
+                let queryContact = self.database.child("User").queryOrdered(byChild: "email").queryEqual(toValue: contactEmail)
+                queryContact.observeSingleEvent(of: .value, with: {snapshotUser in
+                    if let dic = snapshotUser.value as? NSDictionary {
+                        for (_, v) in dic {
+                            guard let value = v as? NSDictionary, let id = value["id"] as? String else {
+                                continue
+                            }
+                            let name = value["name"] as? String ?? ""
+                            let email = value["email"] as? String ?? ""
+                            let textColor = value["color"] as? String ?? ""
+                            let status = value["status"] as? String ?? ""
+                            users.append(ChatAppUser(id: id, name: name, emailAddress: email, color: textColor, status: status))
+                            completion(users)
+                        }
+                    }
+                })
+            }
+            
+        }) { error in
+            print(error.localizedDescription)
+        }
+    }
+    
     public func findUsers(findString: String, completion: @escaping (([ChatAppUser])->Void)) {
         var users: [ChatAppUser] = []
         

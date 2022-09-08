@@ -24,7 +24,7 @@ class ConversationsViewController: UIViewController {
     
     private let noConversationsLabel: UILabel = {
         let label = UILabel()
-        label.text = "No conversations!"
+        label.text = "Нет контактов!"
         label.textAlignment = .center
         label.textColor = .gray
         label.font = .systemFont(ofSize: 21, weight: .medium)
@@ -40,6 +40,10 @@ class ConversationsViewController: UIViewController {
         view.addSubview(tableView)
         view.addSubview(noConversationsLabel)
         setupTableView()
+        
+        
+        cryptTest();
+        
     }
 
     override func viewDidLayoutSubviews() {
@@ -73,6 +77,7 @@ class ConversationsViewController: UIViewController {
             print("Неизвестная ошибка!")
             return
         }
+        UserDefaults.standard.set(Auth.auth().currentUser?.email, forKey: "email")
         DatabaseManager.shared.getUser(with: uid, completion: {[weak self] user in
             guard let strongSelf = self else {
                 return
@@ -80,6 +85,7 @@ class ConversationsViewController: UIViewController {
             
             let col = UIColor.fromUIntText(text: user.color)
             strongSelf.view.backgroundColor = col
+            
             print ("name-\(user.name) color-\(col) email-\(user.emailAddress)")
         })
     }
@@ -110,7 +116,9 @@ class ConversationsViewController: UIViewController {
 
         print("starting conversation fetch...")
         
-        DatabaseManager.shared.getAllUsers(completion: { [weak self] result in
+        //DatabaseManager.shared.getAllUsers(completion: { [weak self] result in
+        DatabaseManager.shared.findContacts(completion:  { [weak self] result in
+            self?.spinner.dismiss()
             if result.count == 0 {
                 self?.tableView.isHidden = true
                 self?.noConversationsLabel.isHidden = false
@@ -119,14 +127,37 @@ class ConversationsViewController: UIViewController {
                 self?.noConversationsLabel.isHidden = true
                 self?.tableView.isHidden = false
                 self?.userList = result
-
                 DispatchQueue.main.async {
-                    self?.spinner.dismiss()
                     self?.tableView.reloadData()
                 }
             }
         })
+    }
+    
+    private func startListeningForUsers2() {
+        if let observer = loginObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+
+        print("starting conversation fetch...")
         
+        DatabaseManager.shared.getAllUsers(completion: { [weak self] result in
+        //DatabaseManager.shared.findContacts(completion:  { [weak self] result in
+            self?.spinner.dismiss()
+            if result.count == 0 {
+                self?.tableView.isHidden = true
+                self?.noConversationsLabel.isHidden = false
+                
+                print("нет данных")
+            } else {
+                self?.noConversationsLabel.isHidden = true
+                self?.tableView.isHidden = false
+                self?.userList = result
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+            }
+        })
     }
     
 }
