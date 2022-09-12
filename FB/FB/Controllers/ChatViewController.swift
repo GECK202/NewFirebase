@@ -41,7 +41,7 @@ class ChatViewController: MessagesViewController {
             layout.textMessageSizeCalculator.incomingAvatarSize = .zero
         }
         
-        view.backgroundColor = .green
+        //view.backgroundColor = .green
         
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
@@ -157,24 +157,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
             return
         }
         spinner.show(in: view)
-        //var curSender: Sender
-        //var mid: String
-        
-        //switch (senderNumber) {
-        //case 0:
-        //    curSender = selfSender
-        //    mid = "1"
-        //case 1:
-        //    curSender = selfSender2
-        //    mid = "2"
-        //default:
-        //    curSender = selfSender3
-        //    mid = "3"
-        //}
-        //senderNumber += 1
-        //if senderNumber == 3 {
-        //    senderNumber = 0
-        //}
+
         
         print("Sending: \(text)")
         
@@ -185,21 +168,10 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         }
         
         DatabaseManager.shared.saveMessage(message: text, recipient: recipient.emailAddress, completion: { result in
-            self.messageInputBar.inputTextView.text = ""
-            if result == false {
-                //self.messages.append(Message(sender: self.selfSender,
-                //                        messageId: "",
-                 //                       sentDate: Date(),
-                 //                       kind: .text(text)))
-                //self.messagesCollectionView.reloadData()
-                //
-                //DispatchQueue.main.async {
-                //    self.messagesCollectionView.reloadData()
-                //    self.messagesCollectionView.scrollToLastItem()
-                }
-            //} else {
+            //self.messageInputBar.inputTextView.text = ""
+            if result == true {
                 print("СООБЩЕНИЕ НЕ СОХРАНЕНО!!")
-            //}
+            }
         })
         self.spinner.dismiss()
     }

@@ -24,7 +24,7 @@ class ConversationsViewController: UIViewController {
     
     private let noConversationsLabel: UILabel = {
         let label = UILabel()
-        label.text = "Нет контактов!"
+        label.text = "У вас нет контактов!"
         label.textAlignment = .center
         label.textColor = .gray
         label.font = .systemFont(ofSize: 21, weight: .medium)
@@ -40,9 +40,8 @@ class ConversationsViewController: UIViewController {
         view.addSubview(tableView)
         view.addSubview(noConversationsLabel)
         setupTableView()
-        
-        
-        //cryptTest();
+                
+        cryptTest();
         
     }
 
@@ -79,12 +78,12 @@ class ConversationsViewController: UIViewController {
         }
         UserDefaults.standard.set(Auth.auth().currentUser?.email, forKey: "email")
         DatabaseManager.shared.getUser(with: uid, completion: {[weak self] user in
-            guard let strongSelf = self else {
+            guard self != nil else {
                 return
             }
             
             let col = UIColor.fromUIntText(text: user.color)
-            strongSelf.view.backgroundColor = col
+            //strongSelf.view.backgroundColor = col
             
             print ("name-\(user.name) color-\(col) email-\(user.emailAddress)")
         })
@@ -116,7 +115,6 @@ class ConversationsViewController: UIViewController {
 
         print("starting conversation fetch...")
         
-        //DatabaseManager.shared.getAllUsers(completion: { [weak self] result in
         DatabaseManager.shared.findContacts(completion:  { [weak self] result in
             self?.spinner.dismiss()
             if result.count == 0 {

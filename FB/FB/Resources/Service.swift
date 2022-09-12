@@ -9,29 +9,28 @@ import Foundation
 import CryptoSwift
 
 public func crypt(message: String, key: String)->String {
-    let cryptString = try! aesEncrypt(s: message, key: key)
-    return cryptString
+    if let cryptString = encryptAESBase64(message: message, key: key) {
+        return cryptString
+    }
+    return message
 }
 
 public func decrypt(message: String, key: String)->String {
-    let decryptString = try! aesDecrypt(cryptString: message, key: key)
-    return decryptString
+    if let decryptString = decryptAESBase64(message: message, key: key) {
+        return decryptString
+    }
+    return ""
 }
 
 public func generateKey()->String {
-    /*
     let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?"
     var s = ""
-    for _ in 0 ..< 12{
-        //Unicode.Scalar(value)!
+    for _ in 0 ..< 16{
         s.append(letters.randomElement()!)
     }
     return s
-    */
-    
-    
-    return key
 }
+
 
 public func getCurTime()->String {
     let someDate = Date()
@@ -60,13 +59,16 @@ public func getDate(from timeString: String)->Date {
 func cryptTest() {
     let key = generateKey()//"bbC2H19lkVbQDfak" // length == 16
     let s = "hello привет"
-    let enc = try! aesEncrypt2(s: s, key: key)
-    let dec = try! aesDecrypt2(cryptString: enc, key: key)
+    //let enc = try! aesEncrypt(s: s, key: key)
+    //let dec = try! aesDecrypt(cryptString: enc, key: key)
 
+    let enc = encryptAESBase64(message: s, key: key) ?? "error"
+    let dec = decryptAESBase64(message: enc, key: key) ?? "error"
+    
     print(s) // string to encrypt
     print("enc:\(enc)") //1nkk47zTcgJaYSf2Nkspt1BFO5VmVx2PdUtdz9NJHDg=
-    //print("dec:\(dec)") // string to encrypt
-    //print("\(s == dec)") // true
+    print("dec:\(dec)") // string to encrypt
+    print("\(s == dec)") // true
 
 }
 //*/
@@ -86,11 +88,17 @@ func cryptTest() {
     */
     
 func aesEncrypt(s:String, key: String) throws -> String {
-        
-    let encrypted = try AES(key: [UInt8](key.utf8), blockMode: ECB()).encrypt([UInt8](s.data(using: .utf8)!))
-    //let data: Data = Data(encrypted)
-    //let str: NSString = NSString(data: data, encoding: String.Encoding.utf16.rawValue) ?? "error"
-    return Data(encrypted).base64EncodedString()
+    let uKey = [UInt8](key.utf8)
+    
+    let aes = try AES(key: uKey, blockMode: ECB())
+    let data1 = [UInt8](s.data(using: .utf8)!)
+    let encrypted = try aes.encrypt(data1)
+    
+    //let encrypted = try AES(key: [UInt8](key.utf8), blockMode: ECB()).encrypt([UInt8](s.data(using: .utf8)!))
+    let data: Data = Data(encrypted)
+    let e:String = data.base64EncodedString()
+    let result = String(e)
+    return e//Data(encrypted).base64EncodedString()
     }
 
 func aesDecrypt(cryptString:String, key: String) throws -> String {
@@ -99,29 +107,57 @@ func aesDecrypt(cryptString:String, key: String) throws -> String {
     return String(bytes: decrypted, encoding: .utf8) ?? cryptString
 }
 
-func aesEncrypt2(s:String, key: String) throws -> NSString {
-    let data1 = [UInt8](s.data(using: .utf8)!)
-    let encrypted = try AES(key: [UInt8](key.utf8), blockMode: ECB()).encrypt(data1)
-    
-    let data: Data = Data(encrypted)
-    let str = NSString(data: data, encoding: String.Encoding.utf16BigEndian.rawValue) ?? "error"
-    //let str2 = NSString(bytes: encrypted, length: encrypted.count, encoding: String.Encoding.unicode.rawValue) ?? "error"
-    let str3 =  String(bytes: encrypted, encoding: String.Encoding.utf16BigEndian)!
-    
-    guard let data2 = str3.data(using: String.Encoding.utf16BigEndian) else { return "error1" }
-    let arrData = [UInt8](data2)
-    let decrypted = try AES(key: [UInt8](key.utf8), blockMode: ECB()).decrypt([UInt8](data))
-    let newS = String(bytes: decrypted, encoding: .utf8) ?? "error2"
-    print("\(encrypted)")
-    print("\(arrData)")
-    return str//Data(encrypted).base64EncodedString()
-    }
+func encryptAESHex(message: String, key: String) -> String? {
+     if let aes = try? AES(key: [UInt8](key.utf8), blockMode: ECB()),
+         let encrypted = try? aes.encrypt(Array<UInt8>(message.utf8)) {
+         return encrypted.toHexString()
+     }
+     return nil
+ }
 
-func aesDecrypt2(cryptString:NSString, key: String) throws -> String {
-    guard let data = cryptString.data(using: String.Encoding.utf16.rawValue) else { return "error1" }
-    let arrData = [UInt8](data)
-    let decrypted = try AES(key: [UInt8](key.utf8), blockMode: ECB()).decrypt([UInt8](data))
-    return String(bytes: decrypted, encoding: .utf8) ?? "error2"
+func decryptAESHex(message: String, key: String) -> String? {
+     if let aes = try? AES(key: [UInt8](key.utf8), blockMode: ECB()),
+         let decrypted = try? aes.decrypt(Array<UInt8>(hex: message)) {
+         return String(data: Data(_: decrypted), encoding: .utf8)
+     }
+     return nil
+ }
+
+func encryptAESBase64(message: String, key: String) -> String? {
+     if let aes = try? AES(key: [UInt8](key.utf8), blockMode: ECB()),
+         let encrypted = try? aes.encrypt(Array<UInt8>(message.utf8)) {
+         return encrypted.toBase64()
+     }
+     return nil
+ }
+
+func decryptAESBase64(message: String, key: String) -> String? {
+     if let aes = try? AES(key: [UInt8](key.utf8), blockMode: ECB()),
+         let decrypted = try? aes.decrypt(Array<UInt8>(base64: message)) {
+         return String(data: Data(_: decrypted), encoding: .utf8)
+     }
+     return nil
+ }
+
+func encryptAESUtf8(message: String, key: String) -> String? {
+    if let aes = try? AES(key: [UInt8](key.utf8), blockMode: ECB()),
+       let encrypted = try? aes.encrypt(Array<UInt8>(message.utf8)) {
+        let b64 = encrypted.toBase64()
+        guard let data = Data(base64Encoded: b64) else {
+            return nil
+        }
+        return String(data: data, encoding: .utf8)
+    }
+    return nil
+}
+
+func decryptAESUtf8(message: String, key: String) -> String? {
+    let b64 = Data(message.utf8).base64EncodedString()
+    if let aes = try? AES(key: [UInt8](key.utf8), blockMode: ECB()),
+       let decrypted = try? aes.decrypt(Array<UInt8>(base64: b64)) {
+        return String(data: Data(_: decrypted), encoding: .utf8)
+    }
+    return nil
 }
 
 

@@ -13,6 +13,8 @@ final class DatabaseManager {
     
     static let shared = DatabaseManager()
     
+    private var sharedKey = "";
+    
     private var user: ChatAppUser?
     
     private let database = Database.database().reference()
@@ -294,7 +296,9 @@ extension DatabaseManager {
                 completion(false)
                 return
             }
-            let saveMessage = ["Message": crypt(message: message, key: key), "Sender": userEmail, "SenderRecipient": users, "time": time]
+            let crypt = crypt(message: message, key: key)
+            self.sharedKey = key
+            let saveMessage = ["Message": crypt, "Sender": userEmail, "SenderRecipient": users, "time": time]
             self.database.child("Messages").child(uid).setValue(saveMessage)
             completion(true)
         })
@@ -324,7 +328,8 @@ extension DatabaseManager {
                     let text = value["Message"] as? String ?? ""
                     let sender = value["Sender"] as? String ?? ""
                     let time = value["time"] as? String ?? ""
-                    let mes = MessageModel(id: mid, text: decrypt(message: text, key: key), sender: sender, time: time)
+                    let decrypt = decrypt(message: text, key: key != "" ? key: self.sharedKey)
+                    let mes = MessageModel(id: mid, text: decrypt, sender: sender, time: time)
                     messages.append(mes)
                 }
                 completion(messages.sorted{ $0.time < $1.time })
